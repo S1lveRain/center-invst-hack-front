@@ -1,0 +1,60 @@
+import React, { useState } from "react";
+import { Card, Input, Button, Typography } from "antd";
+import styles from "./OpenQuizQuestion.module.css";
+
+const { Title } = Typography;
+const { TextArea } = Input;
+
+interface OpenQuizQuestionProps {
+  question: string;
+  correctAnswer: string;
+  onSubmit: (isCorrect: boolean) => void;
+}
+
+const OpenQuizQuestion: React.FC<OpenQuizQuestionProps> = ({
+  question,
+  correctAnswer,
+  onSubmit,
+}) => {
+  const [answer, setAnswer] = useState<string>("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setAnswer(e.target.value);
+  };
+
+  const handleSubmit = () => {
+    onSubmit(
+      answer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()
+    );
+  };
+
+  return (
+    <Card
+      title={
+        <Title level={4} style={{ margin: 0 }}>
+          {question}
+        </Title>
+      }
+      className={styles.card}
+    >
+      <div className={styles.inputContainer}>
+        <TextArea
+          placeholder="Введите ваш ответ"
+          value={answer}
+          onChange={handleChange}
+          autoSize={{ minRows: 1, maxRows: 6 }}
+        />
+      </div>
+      <Button
+        type="primary"
+        onClick={handleSubmit}
+        disabled={!answer}
+        className={styles.submitButton}
+      >
+        Ответить
+      </Button>
+    </Card>
+  );
+};
+
+export default OpenQuizQuestion;
