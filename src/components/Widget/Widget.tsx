@@ -7,7 +7,7 @@ interface IWidget {
   suffix?: string;
   icon?: any;
 }
-export const Widget: FC<IWidget> = ({ value, title, icon }) => {
+export const Widget: FC<IWidget> = ({ value, title, icon, suffix }) => {
   return (
     <Card
       size="small"
@@ -26,6 +26,7 @@ export const Widget: FC<IWidget> = ({ value, title, icon }) => {
         precision={2}
         valueStyle={{ color: "#EBFF00", fontWeight: 600 }}
         prefix={icon}
+        suffix={suffix}
       />
     </Card>
   );
