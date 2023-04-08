@@ -9,6 +9,8 @@ import {data, vacancyList} from "./app/dataExample";
 import { SelectVacancy } from "./pages/SelectVacancy/SelectVacancy";
 import { VacancyWindow } from "./pages/VacancyWindow/VacancyWindow";
 import { VacancyQuiz } from "./pages/VacancyQuiz/VacancyQuiz";
+import { ApplicationForm } from "./pages/ApplicationForm/ApplicationForm";
+import { ModalResult } from "./components/ModalResult/ModalResult";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -42,6 +44,8 @@ const App: React.FC = () => {
                   <Route path="/vacancy/:id" element={<VacancyWindow data={data} />}/>
                   <Route path="/selectVacancy" element = {<SelectVacancy />}/>
                   <Route path="/quiz/:id" element = {<VacancyQuiz/>}/>
+                  <Route path="/auto" element = {<ApplicationForm/>}/>
+                  <Route path="/modal" element = {<ModalResult/>}/>
               </Routes>
           </Content>
         </Layout>
