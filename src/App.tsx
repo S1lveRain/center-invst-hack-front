@@ -23,6 +23,12 @@ import QuizQuestion from "./components/QuizQuestion/QuizQuestion";
 import { Widget } from "./components/Widget/Widget";
 import OpenQuizQuestion from "./components/OpenQuizQuestion/OpenQuizQuestion";
 import { MultipleQuizQuestion } from "./components/MultipleQuizQuestion/MultipleQuizQuestion";
+import {Link, Route, Routes} from "react-router-dom";
+import {SystemAnalystPage} from "./components/SystemAnalystPage/SystemAnalystPage";
+import {IOSDevoloper} from "./components/IOSDeveloper/IOSDevoloper";
+import {OfferYour} from "./components/OfferYour/OfferYour";
+import {TestPage} from "./components/TestPage/testPage";
+import {DatabaseAdministrator} from "./components/DatabaseAdministrator/DatabaseAdministrator";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -58,75 +64,43 @@ const App: React.FC = () => {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const question = "Какая планета ближе к Солнцу?";
-  const options = [
-    { id: "1", text: "Марс" },
-    { id: "2", text: "Венера" },
-    { id: "3", text: "Земля" },
-    { id: "4", text: "Меркурий" },
-  ];
-  const correctAnswers = ["1", "3"];
-  const correctAnswer = "4";
-
-  const handleSubmit = (isCorrect: boolean) => {};
 
   return (
     <Layout>
       <Header className="header" style={{backgroundColor: 'white'}}>
-        <div className="logo" />
-        <Menu
-          theme="light"
-          mode="horizontal"
-          defaultSelectedKeys={["2"]}
-          items={items1}
-        />
+          <div className="logo"><DatabaseOutlined /></div>
       </Header>
       <Content style={{ padding: "0 50px" }}>
         <Breadcrumb style={{ margin: "16px 0" }}></Breadcrumb>
         <Layout style={{ padding: "24px 0", background: colorBgContainer }}>
           <Sider style={{ background: colorBgContainer }} width={200}>
-           
-{/* Прописать Route */}
-
+              <Menu
+                  mode="inline"
+                  defaultSelectedKeys={["1"]}
+                  style={{ height: "100%" }}
+              >
+                  <Menu.Item key="1" icon={<DatabaseOutlined />}>
+                      <Link to={'/iosdevoloper'}>iOS разработчик</Link>
+                  </Menu.Item>
+                  <Menu.Item key="2" icon={<DatabaseOutlined />}>
+                      <Link to={'/systemanalytist'}>Системный аналитик</Link>
+                  </Menu.Item>
+                  <Menu.Item key="3" icon={<DatabaseOutlined />}>
+                      <Link to={'/databaseAdmin'}>Администратор баз данных</Link>
+                  </Menu.Item>
+                  <Menu.Item key="4" icon={<DatabaseOutlined />}>
+                      <Link to={'/offer'}>Предложить свою...</Link>
+                  </Menu.Item>
+              </Menu>
           </Sider>
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
-            <h1>Название направления</h1>
-            <div style={{ marginBottom: 24 }}>
-              Здесь будет описание выбранной позиции.
-            </div>
-            <Row gutter={16} style={{ gap: 10 }}>
-              <Widget
-                title="тип занятости"
-                value="полная"
-                icon={<SmileFilled />}
-              />
-              <Widget
-                title="зарплата"
-                value="80,000 - 120,000 "
-                icon={<DollarCircleFilled />}
-                suffix={"₽"}
-              />
-            </Row>
-            <Button type="primary" style={{ marginTop: 24 }}>
-              Перейти к тестированию
-            </Button>
-            <QuizQuestion
-              question={question}
-              options={options}
-              correctAnswer={correctAnswer}
-              onSubmit={handleSubmit}
-            />
-            <OpenQuizQuestion
-              question={question}
-              correctAnswer={correctAnswer}
-              onSubmit={handleSubmit}
-            />
-            <MultipleQuizQuestion
-              question={question}
-              options={options}
-              correctAnswers={correctAnswers}
-              onSubmit={handleSubmit}
-            />
+              <Routes>
+                  <Route path="/" element={<TestPage />}/>
+                  <Route path="/iosdevoloper" element={<IOSDevoloper />} />
+                  <Route path="/databaseAdmin" element={<DatabaseAdministrator />}  />
+                  <Route path="/systemanalytist" element={<SystemAnalystPage />} />
+                  <Route path="/offer" element={<OfferYour />} />
+              </Routes>
           </Content>
         </Layout>
       </Content>
