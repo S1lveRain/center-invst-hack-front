@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Card, Checkbox, Button, Typography, theme } from "antd";
 import styles from "./MultipleQuizQuestion.module.css";
+import { AnswerT } from "../../app/Types/DirectionType";
 
 const { Title } = Typography;
 
@@ -11,7 +12,7 @@ interface Option {
 
 interface MultipleChoiceQuizQuestionProps {
   question: string;
-  options: Option[];
+  options: AnswerT[];
   correctAnswers: string[];
   onSubmit: (isCorrect: boolean) => void;
 }
@@ -50,7 +51,7 @@ export const MultipleQuizQuestion: React.FC<
             className={styles.checkbox}
             style={{
               margin: 0,
-              backgroundColor: selectedOptions.includes(option.id)
+              backgroundColor: selectedOptions.includes(String(option.id))
                 ? token.colorFill
                 : "transparent",
             }}
