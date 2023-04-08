@@ -6,7 +6,6 @@ import { Breadcrumb, Layout, Menu, theme } from "antd";
 import {Link, Route, Routes} from "react-router-dom";
 import {TestPage} from "./pages/TestPage/TestPage";
 import {data, vacancyList} from "./app/dataExample";
-
 import { SelectVacancy } from "./pages/SelectVacancy/SelectVacancy";
 import { VacancyWindow } from "./pages/VacancyWindow/VacancyWindow";
 import { VacancyQuiz } from "./pages/VacancyQuiz/VacancyQuiz";
