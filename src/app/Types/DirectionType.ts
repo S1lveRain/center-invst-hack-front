@@ -1,29 +1,35 @@
 
-type AnswerT = {
+ export type AnswerT = {
+    id: number,
     text: string,
     isCorrect: boolean,
 }
-type QuestionT = {
+export type QuestionT = {
+    id: number,
     text: string,
     type: string,
     answers: AnswerT[],
 }
-type TestT = {
+export type TestT = {
+    id: number,
     name: string,
     desc: string,
     questions: QuestionT[]
 }
-type WaysT = {
+export type WaysT = {
+    id: number,
     name: string,
     desc: string,
     tests: TestT[]
 }
 
-type InfoT = {
+export type InfoT = {
+    id: number,
     name: string,
     value: string,
 }
-type DirectionT = {
+export type DirectionT = {
+    id: number,
     title: string,
     desc: string,
     infos: InfoT[],

@@ -4,12 +4,14 @@ import { Widget } from "../../components/Widget/Widget";
 import { Simulate } from "react-dom/test-utils";
 import styles from './VacancyQuiz.module.css'
 import { quizData } from '../../app/dataExample';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import OpenQuizQuestion from '../../components/OpenQuizQuestion/OpenQuizQuestion';
 import { MultipleQuizQuestion } from '../../components/MultipleQuizQuestion/MultipleQuizQuestion';
 import QuizQuestion from '../../components/QuizQuestion/QuizQuestion';
 import { MenuProps } from 'rc-menu';
 import { DownOutlined } from '@ant-design/icons';
+import { useGetDirectionByIdQuery } from '../../app/services/DirectionApi';
+import { useGetTestByIdQuery } from '../../app/services/TestsApi';
 const { Title } = Typography;
 
 
@@ -17,6 +19,7 @@ interface VacancyQuizI {
     /* vacancyList: VacancyT[], */
 }
 const getRandomInt = (max: number, min = 0) => Math.floor(Math.random() * (max - min + 1)) + min;
+
 
 const searchResult = (query: string) =>
     new Array(getRandomInt(5))
@@ -50,8 +53,11 @@ const searchResult = (query: string) =>
         });
 
 export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
+    const { id } = useParams<{ id: string }>();
+    const { data: test, isLoading } = useGetTestByIdQuery(id as string)
     const [activeTabKey1, setActiveTabKey1] = useState<string>('quizes');
     const [options, setOptions] = useState<SelectProps<object>['options']>([]);
+    console.log(test)
 
     const handleSearch = (value: string) => {
         setOptions(value ? searchResult(value) : []);
@@ -64,7 +70,7 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
     const onTab1Change = (key: string) => {
         setActiveTabKey1(key);
     };
-    const items: MenuProps['items'] = quizData.map((_, index) => {
+    const items: MenuProps['items'] = test?.questions.map((_, index) => {
         const item = {
             label: index + 1,
             key: index
@@ -165,16 +171,24 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
 
     const quizes = <Col className={styles.quizList}>
         {
-            quizData.length && quizData.map((quiz, index) => (
+            test?.questions.length && test.questions.map((quiz, index) => (
                 quiz.type === 'open'
                     ?
-                    <OpenQuizQuestion correctAnswer={quiz.correctAnswer as string} question={quiz.question} onSubmit={() => { }} />
+                    <OpenQuizQuestion correctAnswer={quiz.answers[0].text} question={quiz.text} onSubmit={() => { }} />
                     :
                     quiz.type === 'multiple'
                         ?
-                        <MultipleQuizQuestion correctAnswers={quiz.correctAnswer as string[]} options={quiz.options} question={quiz.question} onSubmit={() => { }} />
+                        <MultipleQuizQuestion
+                            correctAnswers={quiz.answers.filter(answer => answer.isCorrect === true).map(answer => answer.text)}
+                            options={[...quiz.answers]}
+                            question={quiz.text} onSubmit={() => { }} />
                         :
-                        quiz.type === 'standart' && <QuizQuestion correctAnswer={quiz.correctAnswer as string} options={quiz.options} question={quiz.question} onSubmit={() => { }} />
+                        quiz.type === 'single'
+                        &&
+                        <QuizQuestion
+                            correctAnswer={quiz.answers.filter(answer => answer.isCorrect === true)[0].text}
+                            options={[...quiz.answers]} question={quiz.text}
+                            onSubmit={() => { }} />
 
             ))
         }

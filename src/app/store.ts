@@ -1,15 +1,18 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { directionApi } from './services/DirectionApi'
+import { testsApi } from './services/TestsApi'
 // ...
 
 const rootReducer = combineReducers({
-    [directionApi.reducerPath]: directionApi.reducer
+    [directionApi.reducerPath]: directionApi.reducer,
+    [testsApi.reducerPath]: testsApi.reducer,
 })
 export const store = configureStore({
     reducer: rootReducer,
     middleware: getDefaultMiddware =>
     getDefaultMiddware({}).concat([
         directionApi.middleware,
+        testsApi.middleware,
     ])
 })
 

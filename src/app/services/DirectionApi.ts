@@ -1,4 +1,5 @@
 
+import { DirectionT } from "../Types/DirectionType";
 import { API_URL } from "../http";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -9,13 +10,18 @@ export const directionApi = createApi({
 	baseQuery: fetchBaseQuery({
 		baseUrl: `${API_URL}`,
 	}),
-	tagTypes: ["Direction"],
 	endpoints: builder => ({
-		getDirections: builder.query<DirectionT[], undefined>({
-			query: () => ({
+		getDirections: builder.query<DirectionT[], any>({
+			query: (limit: string) => ({
 				url: `/directions`,
 			}),
+		
 
+		}),
+		getDirectionById: builder.query<DirectionT,string>({
+			query: (id: string) => ({
+				url: `/directions/${id}`,
+			}),
 		}),
 
 		/* addPage: builder.mutation<null, AddExpoPageReqT>({
@@ -46,5 +52,6 @@ export const directionApi = createApi({
 
 export const {
 	useGetDirectionsQuery,
+	useGetDirectionByIdQuery,
 
 } = directionApi;
