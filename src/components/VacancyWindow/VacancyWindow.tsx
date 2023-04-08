@@ -2,7 +2,7 @@ import React, {FC, useEffect, useState} from 'react';
 import {Button, Result, Row, theme} from "antd";
 import {Widget} from "../Widget/Widget";
 import styles from './VacancyWindow.module.css'
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import { ArrowRightOutlined } from '@ant-design/icons';
 
 interface VacancyWindowI {
@@ -42,6 +42,7 @@ export const VacancyWindow: FC<VacancyWindowI> = ({data}) => {
                                     )
                                 })}
                                 <div>
+                                    <Link to={'/selectVacancy'}>
                                     <Widget
                                         title="Пройдите тестирование"
                                         value=" "
@@ -54,9 +55,10 @@ export const VacancyWindow: FC<VacancyWindowI> = ({data}) => {
                                         type="outlined"
                                         pressable
                                     />
+                                    </Link>
                                 </div>
                             </Row>
-                        </div>,
+                        </div>
                     ]}
                 />
             )}

@@ -9,6 +9,7 @@
 
 .vacancyList{
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 4rem));
-
+    grid-auto-flow: column;
+    grid-template-columns: repeat(auto-fit, minmax(max-content, 100px));
+    gap: 1rem;
 }
