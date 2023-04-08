@@ -1,8 +1,16 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { directionApi } from './services/DirectionApi'
 // ...
 
+const rootReducer = combineReducers({
+    [directionApi.reducerPath]: directionApi.reducer
+})
 export const store = configureStore({
-    reducer: {},
+    reducer: rootReducer,
+    middleware: getDefaultMiddware =>
+    getDefaultMiddware({}).concat([
+        directionApi.middleware,
+    ])
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
