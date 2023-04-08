@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Button, Typography, Radio, RadioChangeEvent, theme } from "antd";
+import { Card, Button, Typography, Radio, RadioChangeEvent, theme} from "antd";
 import styles from "./QuizQuestion.module.css";
 
 const { Title } = Typography;

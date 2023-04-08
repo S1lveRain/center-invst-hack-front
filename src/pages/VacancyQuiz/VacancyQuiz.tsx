@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, Col, Row, AutoComplete, Input, Space, SelectProps, Typography } from "antd";
+import { Button, Card, Col, Row, AutoComplete, Input, Space, SelectProps, Typography, Dropdown } from "antd";
 import { Widget } from "../../components/Widget/Widget";
 import { Simulate } from "react-dom/test-utils";
 import styles from './VacancyQuiz.module.css'
@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
 import OpenQuizQuestion from '../../components/OpenQuizQuestion/OpenQuizQuestion';
 import { MultipleQuizQuestion } from '../../components/MultipleQuizQuestion/MultipleQuizQuestion';
 import QuizQuestion from '../../components/QuizQuestion/QuizQuestion';
+import { MenuProps } from 'rc-menu';
+import { DownOutlined } from '@ant-design/icons';
 const { Title } = Typography;
 
 
@@ -62,6 +64,54 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
     const onTab1Change = (key: string) => {
         setActiveTabKey1(key);
     };
+    const items: MenuProps['items'] = quizData.map((_, index) => {
+        const item = {
+            label: index + 1,
+            key: index
+
+        }
+
+        return item
+
+    })
+
+    const i2: MenuProps['items'] = [
+        {
+            label: <a href="https://www.antgroup.com">1st menu item</a>,
+            key: '0',
+        },
+        {
+            label: <a href="https://www.aliyun.com">2nd menu item</a>,
+            key: '1',
+        },
+        {
+            type: 'divider',
+        },
+        {
+            label: '3rd menu item',
+            key: '3',
+        },
+    ];
+
+
+
+    /* [
+        {
+          label: <a href="https://www.antgroup.com">1st menu item</a>,
+          key: '0',
+        },
+        {
+          label: <a href="https://www.aliyun.com">2nd menu item</a>,
+          key: '1',
+        },
+        {
+          type: 'divider',
+        },
+        {
+          label: '3rd menu item',
+          key: '3',
+        },
+      ]; */
 
     const tabList = [
         {
@@ -80,12 +130,23 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
             {
                 activeTabKey1 === 'users'
                     ?
-                    <></>
-                    :
                     <>
                         <Button type='primary' ghost>По направлению</Button>
                         <Button type='primary' ghost>По баллам</Button>
                     </>
+                    :
+
+                    <Dropdown menu={{ items }}>
+
+                        <a onClick={(e) => e.preventDefault()}>
+                            <Space>
+                                Click me
+                                <DownOutlined />
+                            </Space>
+                        </a>
+                    </Dropdown>
+
+
             }
 
 
