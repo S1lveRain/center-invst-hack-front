@@ -6,6 +6,7 @@ interface IWidget {
   title?: string;
   suffix?: string;
   icon?: any;
+  onClick?: any;
 }
 export const Widget: FC<IWidget> = ({ value, title, icon, suffix }) => {
   return (
