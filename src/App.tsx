@@ -28,6 +28,7 @@ import { Widget } from "./components/Widget/Widget";
 import OpenQuizQuestion from "./components/OpenQuizQuestion/OpenQuizQuestion";
 import { MultipleQuizQuestion } from "./components/MultipleQuizQuestion/MultipleQuizQuestion";
 import {SelectPath} from "./pages/SelectPath";
+import {ApplicationForm} from "./pages/ApplicationForm/ApplicationForm";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -109,7 +110,9 @@ const App: React.FC = () => {
               </Menu.Item>
             </Menu>
           </Sider>
+
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
+            <ApplicationForm/>
             <Result
               status="success"
               icon={<AppleFilled />}
