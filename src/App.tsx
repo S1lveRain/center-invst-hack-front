@@ -23,6 +23,7 @@ import QuizQuestion from "./components/QuizQuestion/QuizQuestion";
 import { Widget } from "./components/Widget/Widget";
 import OpenQuizQuestion from "./components/OpenQuizQuestion/OpenQuizQuestion";
 import { MultipleQuizQuestion } from "./components/MultipleQuizQuestion/MultipleQuizQuestion";
+import {SelectPath} from "./pages/SelectPath";
 
 const { Header, Content, Footer, Sider } = Layout;
 
