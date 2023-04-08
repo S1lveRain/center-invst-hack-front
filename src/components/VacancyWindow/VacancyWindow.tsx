@@ -2,23 +2,22 @@ import React, {FC, useEffect, useState} from 'react';
 import {Button} from "antd";
 import {Widget} from "../Widget/Widget";
 import styles from './VacancyWindow.module.css'
+import {useParams} from "react-router-dom";
 
 interface VacancyWindowI {
     data: {title: string, description: string, link: string, id: string, icon: any, widgets: {title: string, value: string, icon: any, suffix: string}[]}[],
-    selectedKey: string
 }
 
-export const VacancyWindow: FC<VacancyWindowI> = ({data, selectedKey}) => {
-
+export const VacancyWindow: FC<VacancyWindowI> = ({data}) => {
+    const { id } = useParams<{ id: string }>();
     const [activeElement, setActiveElement] = useState(data[0]);
 
     useEffect(() => {
-        const newActiveElement = data.find(el => el.id === selectedKey);
+        const newActiveElement = data.find(el => el.id === id);
         if (newActiveElement) {
             setActiveElement(newActiveElement);
-            console.log(selectedKey)
         }
-    }, [selectedKey, data]);
+    }, [id, data]);
 
 
     return (

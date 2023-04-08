@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React from "react";
 import {
-  DatabaseOutlined, GlobalOutlined,
+  GlobalOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import {Link, Route, Routes} from "react-router-dom";
@@ -12,13 +12,6 @@ const { Header, Content, Footer, Sider } = Layout;
 
 const App: React.FC = () => {
   const { token } = theme.useToken();
-
-    const [selectedKey, setSelectedKey] = useState("0");
-    const handleSelect = ({ key }: { key: string }) => {
-        setSelectedKey(key);
-    };
-
-
 
   return (
     <Layout style={{height: '100vh'}}>
@@ -32,11 +25,11 @@ const App: React.FC = () => {
               <Menu
                   mode="inline"
                   defaultSelectedKeys={["1"]}
-                  style={{ height: "100%" }}
+                  style={{ height: "100vh" }}
               >
                   {data && data.map((el) => (
-                      <Menu.Item key={el.id} icon={<el.icon />} onClick={handleSelect}>
-                          {el.title}
+                      <Menu.Item key={el.id} icon={<el.icon />}>
+                          <Link to={`/vacancy/${el.id}`}>{el.title}</Link>
                       </Menu.Item>
                   ))}
               </Menu>
@@ -44,7 +37,7 @@ const App: React.FC = () => {
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
               <Routes>
                   <Route path="/" element={<TestPage />}/>
-                  <Route path="/home" element={<VacancyWindow data={data} selectedKey={selectedKey}/>}/>
+                  <Route path="/vacancy/:id" element={<VacancyWindow data={data} />}/>
               </Routes>
           </Content>
         </Layout>
