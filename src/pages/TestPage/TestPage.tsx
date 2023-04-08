@@ -45,7 +45,7 @@ export const TestPage = () => {
             <Button type="primary" style={{marginTop: 24}}>
                 Перейти к тестированию
             </Button>
-            <QuizQuestion
+           {/*  <QuizQuestion
                 question={question}
                 options={options}
                 correctAnswer={correctAnswer}
@@ -61,7 +61,7 @@ export const TestPage = () => {
                 options={options}
                 correctAnswers={correctAnswers}
                 onSubmit={handleSubmit}
-            />
+            /> */}
             <ApplicationForm />
         </div>
     );

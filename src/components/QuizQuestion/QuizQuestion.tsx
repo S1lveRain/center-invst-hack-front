@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Card, Button, Typography, Radio, RadioChangeEvent, theme } from "antd";
+import { Card, Button, Typography, Radio, RadioChangeEvent, theme} from "antd";
 import styles from "./QuizQuestion.module.css";
+import { AnswerT } from "../../app/Types/DirectionType";
 
 const { Title } = Typography;
 const { useToken } = theme;
@@ -11,7 +12,7 @@ export interface Option {
 
 interface QuizQuestionProps {
   question: string;
-  options: Option[];
+  options: AnswerT[];
   correctAnswer: string;
   onSubmit: (isCorrect: boolean) => void;
 }
@@ -80,7 +81,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         {options.map((option) => (
           <ColoredRadio
             key={option.id}
-            value={option.id}
+            value={String(option.id)}
             selectedValue={selectedOption}
             onChange={handleChange}
           >
