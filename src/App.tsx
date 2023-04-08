@@ -27,6 +27,7 @@ import QuizQuestion from "./components/QuizQuestion/QuizQuestion";
 import { Widget } from "./components/Widget/Widget";
 import OpenQuizQuestion from "./components/OpenQuizQuestion/OpenQuizQuestion";
 import { MultipleQuizQuestion } from "./components/MultipleQuizQuestion/MultipleQuizQuestion";
+import {SelectPath} from "./pages/SelectPath";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -74,10 +75,10 @@ const App: React.FC = () => {
 
   return (
     <Layout>
-      <Header className="header">
+      <Header className="header" style={{backgroundColor: 'white'}}>
         <div className="logo" />
         <Menu
-          theme="dark"
+          theme="light"
           mode="horizontal"
           defaultSelectedKeys={["2"]}
           items={items1}
