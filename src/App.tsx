@@ -9,6 +9,8 @@ import {data, vacancyList} from "./app/dataExample";
 import { SelectVacancy } from "./pages/SelectVacancy/SelectVacancy";
 import { VacancyWindow } from "./pages/VacancyWindow/VacancyWindow";
 import { VacancyQuiz } from "./pages/VacancyQuiz/VacancyQuiz";
+import {HelloMessage} from "./pages/HelloMessage/HelloMessage";
+import logo from './assets/centre-invest-bank.svg'
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -18,7 +20,7 @@ const App: React.FC = () => {
   return (
     <Layout style={{height: '100%'}}>
       <Header className="header" style={{backgroundColor: 'white'}}>
-          <div className="logo"><GlobalOutlined /></div>
+          <div className="logo" style={{display: 'flex', alignItems: 'center', textAlign: 'center'}}><Link to={'/vacancy'}><img src={logo} style={{width: 50, height: 50}} alt={'broken'}/></Link></div>
       </Header>
       <Content style={{ padding: "0 50px" }}>
         <Breadcrumb style={{ margin: "16px 0" }}></Breadcrumb>
@@ -26,7 +28,7 @@ const App: React.FC = () => {
           <Sider style={{ background: token.colorBgContainer }} width={200}>
               <Menu
                   mode="inline"
-                  defaultSelectedKeys={["1"]}
+                  defaultSelectedKeys={["0"]}
                   style={{ height: "100vh" }}
               >
                   {data && data.map((el) => (
@@ -40,6 +42,7 @@ const App: React.FC = () => {
               <Routes>
                   <Route path="/" element={<TestPage />}/>
                   <Route path="/vacancy/:id" element={<VacancyWindow data={data} />}/>
+                  <Route path='/vacancy/' element={<HelloMessage />} />
                   <Route path="/selectVacancy" element = {<SelectVacancy />}/>
                   <Route path="/quiz/:id" element = {<VacancyQuiz/>}/>
               </Routes>
