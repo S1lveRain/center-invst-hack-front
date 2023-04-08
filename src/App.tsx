@@ -11,9 +11,7 @@ import {VacancyWindow} from "./components/VacancyWindow/VacancyWindow";
 const { Header, Content, Footer, Sider } = Layout;
 
 const App: React.FC = () => {
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+  const { token } = theme.useToken();
 
     const [selectedKey, setSelectedKey] = useState("0");
     const handleSelect = ({ key }: { key: string }) => {
