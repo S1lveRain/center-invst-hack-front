@@ -7,9 +7,12 @@ import dayjs from "dayjs";
 const {Option} = Select;
 
 const disabledDate = (current: any) => {
-    const minimumAge = moment().subtract(18, 'year');
-    return current && current.isBefore(minimumAge, 'day');
+    const currentDate = moment();
+    const minimumBirthDate = currentDate.subtract(18, 'years');
+    return current && current.isAfter(minimumBirthDate, 'day');
 };
+
+
 
 const genderOptions = [
     {value: 'male', label: 'Мужской'},

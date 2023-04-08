@@ -8,6 +8,7 @@ import {TestPage} from "./pages/TestPage/TestPage";
 import {data, vacancyList} from "./app/dataExample";
 import {VacancyWindow} from "./components/VacancyWindow/VacancyWindow";
 import { SelectVacancy } from "./components/SelectVacancy/SelectVacancy";
+import {ApplicationForm} from "./pages/ApplicationForm/ApplicationForm";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -35,6 +36,7 @@ const App: React.FC = () => {
                   ))}
               </Menu>
           </Sider>
+            <ApplicationForm/>
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
               <Routes>
                   <Route path="/" element={<TestPage />}/>
