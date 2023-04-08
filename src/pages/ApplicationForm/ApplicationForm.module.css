@@ -3,3 +3,25 @@
     color: #8c8c8c;
     margin-top: 5px;
 }
+
+.region-button {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.region-button__circle {
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.region-button__circle--selected {
+    background-color: #ccc;
+}
+
