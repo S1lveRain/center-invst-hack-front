@@ -9,7 +9,7 @@ export const Head = () => {
         className="logo"
         style={{ display: "flex", alignItems: "center", textAlign: "center" }}
       >
-        <Link to={"/vacancy"}>
+        <Link to={"/"}>
           <img src={logo} style={{ width: 50, height: 50 }} alt={"broken"} />
         </Link>
       </div>
