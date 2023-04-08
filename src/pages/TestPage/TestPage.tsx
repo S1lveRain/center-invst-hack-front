@@ -5,6 +5,7 @@ import {DollarCircleFilled, SmileFilled} from "@ant-design/icons";
 import QuizQuestion from "../../components/QuizQuestion/QuizQuestion";
 import OpenQuizQuestion from "../../components/OpenQuizQuestion/OpenQuizQuestion";
 import {MultipleQuizQuestion} from "../../components/MultipleQuizQuestion/MultipleQuizQuestion";
+import {ApplicationForm} from "../ApplicationForm/ApplicationForm";
 
 export const TestPage = () => {
 
@@ -61,6 +62,7 @@ export const TestPage = () => {
                 correctAnswers={correctAnswers}
                 onSubmit={handleSubmit}
             />
+            <ApplicationForm />
         </div>
     );
 };

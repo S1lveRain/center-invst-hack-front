@@ -72,7 +72,6 @@ export const ApplicationForm: React.FC = () => {
                     <div style={{
                         display: 'flex',
                         flexDirection: 'row',
-                        justifyContent: 'space-between',
                         padding: '16px 0',
                         flexWrap: 'wrap'
                     }}>
