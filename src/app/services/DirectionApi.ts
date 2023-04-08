@@ -1,30 +1,25 @@
-
 import { DirectionT } from "../Types/DirectionType";
-import { API_URL } from "../http";
+import { BASE_URL } from "../http";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-
-
 export const directionApi = createApi({
-	reducerPath: "direction",
-	baseQuery: fetchBaseQuery({
-		baseUrl: `${API_URL}`,
-	}),
-	endpoints: builder => ({
-		getDirections: builder.query<DirectionT[], any>({
-			query: (limit: string) => ({
-				url: `/directions`,
-			}),
-		
+  reducerPath: "direction",
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${BASE_URL}`,
+  }),
+  endpoints: (builder) => ({
+    getDirections: builder.query<DirectionT[], any>({
+      query: (limit: string) => ({
+        url: `/directions`,
+      }),
+    }),
+    getDirectionById: builder.query<DirectionT, string>({
+      query: (id: string) => ({
+        url: `/directions/${id}`,
+      }),
+    }),
 
-		}),
-		getDirectionById: builder.query<DirectionT,string>({
-			query: (id: string) => ({
-				url: `/directions/${id}`,
-			}),
-		}),
-
-		/* addPage: builder.mutation<null, AddExpoPageReqT>({
+    /* addPage: builder.mutation<null, AddExpoPageReqT>({
 			query: ({ body, eventId }) => ({
 				url: `/${eventId}/pages`,
 				method: "POST",
@@ -47,11 +42,7 @@ export const directionApi = createApi({
 			}),
 			invalidatesTags: (result, error, id) => [{ type: "Pages", id: "LIST" }],
 		}), */
-	}),
+  }),
 });
 
-export const {
-	useGetDirectionsQuery,
-	useGetDirectionByIdQuery,
-
-} = directionApi;
+export const { useGetDirectionsQuery, useGetDirectionByIdQuery } = directionApi;

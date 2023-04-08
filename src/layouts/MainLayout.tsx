@@ -19,11 +19,11 @@ export const MainLayout: FC<MainLayoutI> = ({ children, withNav = false }) => {
         <div style={{ margin: "16px 0" }} />
         <Layout
           style={{
-            padding: "24px 0",
+            padding: "20px 5px",
             background: withNav ? token.colorBgContainer : undefined,
           }}
         >
-          {withNav && <Nav data={data} />}
+          {withNav && <Nav />}
           <Content>{children}</Content>
         </Layout>
       </Content>

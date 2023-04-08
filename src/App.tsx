@@ -12,19 +12,24 @@ import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage/RegisterPage";
 import { getToken } from "./app/slices/authSlice";
 import { useSelector } from "react-redux";
+import { useGetDirectionsQuery } from "./app/services/DirectionApi";
 
 const App: React.FC = () => {
   const select = useSelector(getToken());
   console.log("select");
   console.log(select);
+  const { data: direction, isLoading } = useGetDirectionsQuery("1212");
   if (select)
     return (
       <Routes>
         <Route path="/login" element={<Navigate to="/" replace />} />
         <Route path="/register" element={<Navigate to="/" replace />} />
         <Route path="/" element={<HelloMessage />} />
-        <Route path="/vacancy/:id" element={<VacancyWindow data={data} />} />
-        <Route path="/selectVacancy" element={<SelectVacancy />} />
+        <Route
+          path="/vacancy/:id"
+          element={<VacancyWindow data={direction} />}
+        />
+        <Route path="/selectVacancy/:id" element={<SelectVacancy />} />
         <Route path="/quiz/:id" element={<VacancyQuiz />} />
       </Routes>
     );
