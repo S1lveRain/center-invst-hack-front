@@ -18,6 +18,7 @@ export const Widget: FC<IWidget> = ({ value, title, icon, suffix }) => {
         padding: 16,
         color: "white",
         boxShadow: "2px 5px 8px 0px rgba(68, 129, 105, 0.3)",
+          width: '25%'
       }}
     >
       <Statistic
