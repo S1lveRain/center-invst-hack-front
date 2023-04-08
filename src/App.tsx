@@ -110,7 +110,6 @@ const App: React.FC = () => {
               </Menu.Item>
             </Menu>
           </Sider>
-
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
             <ApplicationForm/>
             <Result
