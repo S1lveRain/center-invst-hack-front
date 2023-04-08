@@ -72,10 +72,10 @@ const App: React.FC = () => {
 
   return (
     <Layout>
-      <Header className="header">
+      <Header className="header" style={{backgroundColor: 'white'}}>
         <div className="logo" />
         <Menu
-          theme="dark"
+          theme="light"
           mode="horizontal"
           defaultSelectedKeys={["2"]}
           items={items1}
