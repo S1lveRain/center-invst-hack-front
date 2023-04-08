@@ -1,5 +1,6 @@
 import { DollarCircleFilled, AppleOutlined, ControlOutlined, DatabaseOutlined } from "@ant-design/icons";
-import { VacancyT } from "../components/SelectVacancy/SelectVacancy";
+import { VacancyT } from "../pages/SelectVacancy/SelectVacancy";
+import { Option } from "../components/QuizQuestion/QuizQuestion";
 
 export const data= [
     {
@@ -75,11 +76,77 @@ export const data= [
 
 export const vacancyList: VacancyT[] = [
     {
+        id: 1,
         description: '10 вопросов',
         title: 'Макака'
     },
     {
+        id: 2,
         description: '20 вопросов',
         title: 'Обезьян'
     }
+]
+
+
+const question = "Какая планета ближе к Солнцу?";
+const options = [
+    {id: "1", text: "Марс"},
+    {id: "2", text: "Венера"},
+    {id: "3", text: "Земля"},
+    {id: "4", text: "Меркурий"},
+];
+const correctAnswers = ["1", "3"];
+const correctAnswer = "4";
+
+type quizOptionT = {
+    id: string,
+    text: string,
+}
+type quizOptionsT = Option[]
+
+interface quizDataI {
+    type: 'open' | 'multiple' | 'standart',
+    quetion: string,
+    options: quizOptionsT,
+    correctAnswer: string | string[]
+}
+
+export const quizData = [
+    {   
+        type: "open",
+        question: question,
+        options: options,
+        correctAnswer: correctAnswer,
+
+    },
+    {
+        type: 'multiple',
+        question: question,
+        options: options,
+        correctAnswer: correctAnswers,
+
+    },
+    {
+        type: 'standart',
+        question: question,
+        options: options,
+        correctAnswer: correctAnswer,
+
+    },
+    {
+        type: 'multiple',
+        question: question,
+        options: options,
+        correctAnswer: correctAnswers,
+
+    },
+    {
+        type: 'open',
+        question: question,
+        options: options,
+        correctAnswer: correctAnswers,
+
+    },
+
+
 ]
