@@ -14,7 +14,7 @@ const App: React.FC = () => {
   const { token } = theme.useToken();
 
   return (
-    <Layout style={{height: '100vh'}}>
+    <Layout style={{height: '100%'}}>
       <Header className="header" style={{backgroundColor: 'white'}}>
           <div className="logo"><GlobalOutlined /></div>
       </Header>
