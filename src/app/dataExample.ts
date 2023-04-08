@@ -1,4 +1,5 @@
 import { DollarCircleFilled, AppleOutlined, ControlOutlined, DatabaseOutlined } from "@ant-design/icons";
+import { VacancyT } from "../components/SelectVacancy/SelectVacancy";
 
 export const data= [
     {
@@ -71,3 +72,14 @@ export const data= [
     },
 ]
 
+
+export const vacancyList: VacancyT[] = [
+    {
+        description: '10 вопросов',
+        title: 'Макака'
+    },
+    {
+        description: '20 вопросов',
+        title: 'Обезьян'
+    }
+]

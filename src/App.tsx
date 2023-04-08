@@ -5,8 +5,9 @@ import {
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import {Link, Route, Routes} from "react-router-dom";
 import {TestPage} from "./pages/TestPage/TestPage";
-import {data} from "./app/dataExample";
+import {data, vacancyList} from "./app/dataExample";
 import {VacancyWindow} from "./components/VacancyWindow/VacancyWindow";
+import { SelectVacancy } from "./components/SelectVacancy/SelectVacancy";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -38,6 +39,7 @@ const App: React.FC = () => {
               <Routes>
                   <Route path="/" element={<TestPage />}/>
                   <Route path="/vacancy/:id" element={<VacancyWindow data={data} />}/>
+                  <Route path="/selectVacancy" element = {<SelectVacancy />}/>
               </Routes>
           </Content>
         </Layout>
