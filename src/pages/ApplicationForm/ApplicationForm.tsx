@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Card, DatePicker, Form, Input, Select, Tooltip} from 'antd';
+import {Button, Card, Col, DatePicker, Form, Input, Radio, Row, Select, Tooltip} from 'antd';
 import {InfoCircleOutlined, UserOutlined} from '@ant-design/icons';
 import moment from "moment";
 import dayjs from "dayjs";
@@ -27,6 +27,12 @@ const maritalStatusOptions = [
     {value: 'widowed', label: 'Вдовец/Вдова'},
 ];
 
+const goalRequestOptions = [
+    {value: 'practice', label: 'Практика'},
+    {value: 'learning | internship', label: 'Обучение/Стажировка'},
+    {value: 'work', label: 'Работа'},
+];
+
 const validatePhone = (phone: string) => {
     const phoneRegex = /^\+7\s?\(\d{3}\)\s?\d{3}-\d{2}-\d{2}$/;
     return phoneRegex.test(phone);
@@ -45,6 +51,7 @@ export const ApplicationForm: React.FC = () => {
     const [value, setValue] = useState<dayjs.Dayjs | undefined>(undefined);
     const [phoneError, setPhoneError] = useState(false);
     const [phone, setPhone] = useState('');
+    const [selectedRegion, setSelectedRegion] = useState('');
 
     const minDate = new Date();
     minDate.setFullYear(minDate.getFullYear() - 18);
@@ -72,9 +79,9 @@ export const ApplicationForm: React.FC = () => {
                     <div style={{
                         display: 'flex',
                         flexDirection: 'row',
-                        justifyContent: 'space-between',
                         padding: '16px 0',
-                        flexWrap: 'wrap'
+                        flexWrap: 'wrap',
+                        justifyContent: 'space-between'
                     }}>
                         {['Имя', 'Фамилия', 'Отчество'].map((label) => (
                             <Input
@@ -149,8 +156,19 @@ export const ApplicationForm: React.FC = () => {
                                 placeholder="E-mail"
                             />
                         </Form.Item>
+                        <Select
+                            style={{margin: '10px 10px', width: '30%'}}
+                            placeholder="Цель обращения"
+                        >
+                            {goalRequestOptions.map((option) => (
+                                <Option key={option.value} value={option.value}>
+                                    {option.label}
+                                </Option>
+                            ))}
+                        </Select>
                     </div>
                 </Card>
+                <Button style={{margin: '10px', float: "right"}}>Подать заявку</Button>
             </Card>
         </div>
     );
