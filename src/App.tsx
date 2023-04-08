@@ -39,7 +39,7 @@ const App: React.FC = () => {
               <Routes>
                   <Route path="/" element={<TestPage />}/>
                   <Route path="/vacancy/:id" element={<VacancyWindow data={data} />}/>
-                  <Route path="selectVacancy" element = {<SelectVacancy vacancyList={vacancyList}/>}/>
+                  <Route path="/selectVacancy" element = {<SelectVacancy />}/>
               </Routes>
           </Content>
         </Layout>

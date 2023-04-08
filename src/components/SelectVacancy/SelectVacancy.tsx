@@ -4,6 +4,7 @@ import { Widget } from "../Widget/Widget";
 import { Simulate } from "react-dom/test-utils";
 import styles from './SelectVacancy.module.css'
 import click = Simulate.click;
+import { vacancyList } from '../../app/dataExample';
 
 export type VacancyT = {
     title: string;
@@ -11,9 +12,9 @@ export type VacancyT = {
 }
 
 interface SelectVacancyI {
-    vacancyList: VacancyT[],
+    /* vacancyList: VacancyT[], */
 }
-export const SelectVacancy: React.FC<SelectVacancyI> = ({vacancyList}) => {
+export const SelectVacancy: React.FC<SelectVacancyI> = () => {
     return (
         <div className={styles.select_vacancy_wrapper}>
             <div className={styles.select_vacancy_title}>
