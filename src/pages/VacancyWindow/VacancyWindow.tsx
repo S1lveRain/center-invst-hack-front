@@ -1,9 +1,10 @@
 import React, {FC, useEffect, useState} from 'react';
 import {Button, Result, Row, theme} from "antd";
-import {Widget} from "../Widget/Widget";
+
 import styles from './VacancyWindow.module.css'
 import {Link, useParams} from "react-router-dom";
 import { ArrowRightOutlined } from '@ant-design/icons';
+import { Widget } from '../../components/Widget/Widget';
 
 interface VacancyWindowI {
     data: {title: string, description: string, link: string, id: string, icon: any, widgets: {title: string, value: string, icon: any, suffix: string}[]}[],
