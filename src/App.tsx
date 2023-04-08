@@ -7,6 +7,9 @@ import {
   UserOutlined,
   DollarCircleFilled,
   SmileFilled,
+  PhoneOutlined,
+  AppleFilled,
+  ArrowRightOutlined,
 } from "@ant-design/icons";
 import {
   Button,
@@ -14,6 +17,7 @@ import {
   Col,
   Descriptions,
   MenuProps,
+  Result,
   Row,
   Statistic,
 } from "antd";
@@ -54,9 +58,7 @@ const items2: MenuProps["items"] = [
 });
 
 const App: React.FC = () => {
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+  const { token } = theme.useToken();
 
   const question = "Какая планета ближе к Солнцу?";
   const options = [
@@ -83,8 +85,10 @@ const App: React.FC = () => {
       </Header>
       <Content style={{ padding: "0 50px" }}>
         <Breadcrumb style={{ margin: "16px 0" }}></Breadcrumb>
-        <Layout style={{ padding: "24px 0", background: colorBgContainer }}>
-          <Sider style={{ background: colorBgContainer }} width={200}>
+        <Layout
+          style={{ padding: "24px 0", background: token.colorBgContainer }}
+        >
+          <Sider style={{ background: token.colorBgContainer }} width={200}>
             <Menu
               mode="inline"
               defaultSelectedKeys={["1"]}
@@ -105,23 +109,47 @@ const App: React.FC = () => {
             </Menu>
           </Sider>
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
-            <h1>Название направления</h1>
-            <div style={{ marginBottom: 24 }}>
-              Здесь будет описание выбранной позиции.
-            </div>
-            <Row gutter={16} style={{ gap: 10 }}>
-              <Widget
-                title="тип занятости"
-                value="полная"
-                icon={<SmileFilled />}
-              />
-              <Widget
-                title="зарплата"
-                value="80,000 - 120,000 "
-                icon={<DollarCircleFilled />}
-                suffix={"₽"}
-              />
-            </Row>
+            <Result
+              status="success"
+              icon={<AppleFilled />}
+              title="iOS разработчик"
+              subTitle="iOS-разработчик создаёт приложения для устройств Apple — онлайн-банки, навигаторы, фитнес-трекеры и другие полезные сервисы. Он программирует на языке Swift, проектирует интерфейсы, тестирует код и загружает проекты в App Store."
+              extra={[
+                <div>
+                  <Row
+                    gutter={16}
+                    style={{ gap: 10, justifyContent: "center" }}
+                  >
+                    <Widget
+                      title="тип занятости"
+                      value="полная"
+                      icon={<SmileFilled />}
+                    />
+                    <Widget
+                      title="зарплата"
+                      value="80,000 - 120,000"
+                      icon={<DollarCircleFilled />}
+                      suffix={"₽"}
+                    />
+                    <div style={{ marginLeft: 20 }}>
+                      <Widget
+                        title="пройдите тестирование"
+                        value=" "
+                        key="console"
+                        icon={
+                          <ArrowRightOutlined
+                            style={{ color: token.colorPrimary }}
+                          />
+                        }
+                        type="outlined"
+                        pressable
+                      />
+                    </div>
+                  </Row>
+                </div>,
+              ]}
+            />
+
             <Button type="primary" style={{ marginTop: 24 }}>
               Перейти к тестированию
             </Button>
