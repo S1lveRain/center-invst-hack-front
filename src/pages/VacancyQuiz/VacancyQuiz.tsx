@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Row, AutoComplete, Input, Space, SelectProps, Typography, Dropdown } from "antd";
 import { Widget } from "../../components/Widget/Widget";
 import { Simulate } from "react-dom/test-utils";
@@ -12,59 +12,41 @@ import { MenuProps } from 'rc-menu';
 import { DownOutlined } from '@ant-design/icons';
 import { useGetDirectionByIdQuery } from '../../app/services/DirectionApi';
 import { useGetTestByIdQuery } from '../../app/services/TestsApi';
+import { DefaultOptionType } from 'rc-cascader';
 const { Title } = Typography;
 
 
 interface VacancyQuizI {
     /* vacancyList: VacancyT[], */
 }
-const getRandomInt = (max: number, min = 0) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-
-const searchResult = (query: string) =>
-    new Array(getRandomInt(5))
-        .join('.')
-        .split('.')
-        .map((_, idx) => {
-            const category = `${query}${idx}`;
-            return {
-                value: category,
-                label: (
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                        }}
-                    >
-                        <span>
-                            Найдено {query} on{' '}
-                            <a
-                                href={`https://s.taobao.com/search?q=${query}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {category}
-                            </a>
-                        </span>
-                        <span>{getRandomInt(200, 100)} results</span>
-                    </div>
-                ),
-            };
-        });
 
 export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
     const { id } = useParams<{ id: string }>();
     const { data: test, isLoading } = useGetTestByIdQuery(id as string)
     const [activeTabKey1, setActiveTabKey1] = useState<string>('quizes');
-    const [options, setOptions] = useState<SelectProps<object>['options']>([]);
-    console.log(test)
+    const [options, setOptions] = useState<DefaultOptionType[]>([]);
 
-    const handleSearch = (value: string) => {
-        setOptions(value ? searchResult(value) : []);
-    };
+    useEffect(() => {
+        if (test) {
+            let options: DefaultOptionType[] = test.questions.map((question) => (
+                {
+                    label: question.text,
+                    value: question.text,
+                }))
+            setOptions(options)
+
+        }
+    }, [test])
+
+
+
+
 
     const onSelect = (value: string) => {
-        console.log('onSelect', value);
+        const item = test?.questions.filter((question) => question.text === value)[0]
+        const element = document.getElementById(String(item?.id)); 
+        element && element.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
     };
 
     const onTab1Change = (key: string) => {
@@ -81,43 +63,38 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
 
     })
 
-    const i2: MenuProps['items'] = [
-        {
-            label: <a href="https://www.antgroup.com">1st menu item</a>,
-            key: '0',
-        },
-        {
-            label: <a href="https://www.aliyun.com">2nd menu item</a>,
-            key: '1',
-        },
-        {
-            type: 'divider',
-        },
-        {
-            label: '3rd menu item',
-            key: '3',
-        },
-    ];
+
+
+    const quizes = test?.questions.length && test.questions.map((quiz, index) => (
+        quiz.type === 'open'
+            ?
+            <div id={String(quiz.id)}>
+                <OpenQuizQuestion correctAnswer={quiz.answers[0].text} question={quiz.text} onSubmit={() => { }} />
+            </div>
+            :
+            quiz.type === 'multiple'
+                ?
+                <div id={String(quiz.id)}>
+
+                    <MultipleQuizQuestion
+                        correctAnswers={quiz.answers.filter(answer => answer.isCorrect === true).map(answer => answer.text)}
+                        options={[...quiz.answers]}
+                        question={quiz.text} onSubmit={() => { }} />
+                </div>
+                :
+                quiz.type === 'single'
+                &&
+                <div id={String(quiz.id)}>
+                    <QuizQuestion
+                        correctAnswer={quiz.answers.filter(answer => answer.isCorrect === true)[0].text}
+                        options={[...quiz.answers]} question={quiz.text}
+                        onSubmit={() => { }} />
+                </div>
+
+    ))
 
 
 
-    /* [
-        {
-          label: <a href="https://www.antgroup.com">1st menu item</a>,
-          key: '0',
-        },
-        {
-          label: <a href="https://www.aliyun.com">2nd menu item</a>,
-          key: '1',
-        },
-        {
-          type: 'divider',
-        },
-        {
-          label: '3rd menu item',
-          key: '3',
-        },
-      ]; */
 
     const tabList = [
         {
@@ -142,11 +119,11 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
                     </>
                     :
 
-                    <Dropdown menu={{ items }}>
+                    <Dropdown menu={{ items }} >
 
                         <a onClick={(e) => e.preventDefault()}>
                             <Space>
-                                Click me
+                                По номеру
                                 <DownOutlined />
                             </Space>
                         </a>
@@ -161,7 +138,7 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
                 style={{ width: 300 }}
                 options={options}
                 onSelect={onSelect}
-                onSearch={handleSearch}
+                filterOption
             >
                 <Input.Search size="middle" placeholder="Поиск" enterButton />
             </AutoComplete>
@@ -169,34 +146,12 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
     )
 
 
-    const quizes = <Col className={styles.quizList}>
-        {
-            test?.questions.length && test.questions.map((quiz, index) => (
-                quiz.type === 'open'
-                    ?
-                    <OpenQuizQuestion correctAnswer={quiz.answers[0].text} question={quiz.text} onSubmit={() => { }} />
-                    :
-                    quiz.type === 'multiple'
-                        ?
-                        <MultipleQuizQuestion
-                            correctAnswers={quiz.answers.filter(answer => answer.isCorrect === true).map(answer => answer.text)}
-                            options={[...quiz.answers]}
-                            question={quiz.text} onSubmit={() => { }} />
-                        :
-                        quiz.type === 'single'
-                        &&
-                        <QuizQuestion
-                            correctAnswer={quiz.answers.filter(answer => answer.isCorrect === true)[0].text}
-                            options={[...quiz.answers]} question={quiz.text}
-                            onSubmit={() => { }} />
-
-            ))
-        }
-    </Col>
 
     const contentList: Record<string, React.ReactNode> = {
         users: <p>Список пользователей</p>,
-        quizes: quizes,
+        quizes: <Col className={styles.quizList}>
+            {quizes}
+        </Col>,
     };
 
     return (
