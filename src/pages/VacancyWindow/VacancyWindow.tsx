@@ -1,6 +1,5 @@
-import React, {FC, useEffect, useState} from 'react';
-import {Button, Result, Row, theme} from "antd";
-
+import React, { FC, useEffect, useState } from "react";
+import { Button, Result, Row, theme } from "antd";
 import styles from './VacancyWindow.module.css'
 import {Link, useParams} from "react-router-dom";
 import { ArrowRightOutlined } from '@ant-design/icons';

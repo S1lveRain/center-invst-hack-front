@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 import { Card, Row } from "antd";
 import { Widget } from "../../components/Widget/Widget";
 import { Simulate } from "react-dom/test-utils";
-import styles from './SelectVacancy.module.css'
+import styles from "./SelectVacancy.module.css";
 import click = Simulate.click;
 import { vacancyList } from '../../app/dataExample';
 import { Link, useParams } from 'react-router-dom';
@@ -11,13 +11,13 @@ import { dir } from 'console';
 
 
 export type VacancyT = {
-    id: number,
-    title: string;
-    description: string
-}
+  id: number;
+  title: string;
+  description: string;
+};
 
 interface SelectVacancyI {
-    /* vacancyList: VacancyT[], */
+  /* vacancyList: VacancyT[], */
 }
 export const SelectVacancy: React.FC<SelectVacancyI> = () => {
     const { id } = useParams<{ id: string }>();
@@ -42,7 +42,22 @@ export const SelectVacancy: React.FC<SelectVacancyI> = () => {
                 }
             </Row>
         </div>
-    );
+        <Row className={styles.vacancyList}>
+          {vacancyList.length &&
+            vacancyList.map((vacancy, index) => (
+              <a
+                className={styles.vacancy_container}
+                key={vacancy.title + index}
+              >
+                <Link to={`/quiz/${vacancy.id}`}>
+                  <Widget title={vacancy.description} value={vacancy.title} />
+                </Link>
+              </a>
+            ))}
+        </Row>
+      </div>
+    </MainLayout>
+  );
 };
 
 export default SelectVacancyI;

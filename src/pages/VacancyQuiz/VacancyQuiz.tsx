@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button, Card, Col, Row, AutoComplete, Input, Space, SelectProps, Typography, Dropdown } from "antd";
 import { Widget } from "../../components/Widget/Widget";
@@ -14,45 +15,47 @@ import { useGetDirectionByIdQuery } from '../../app/services/DirectionApi';
 import { useGetTestByIdQuery } from '../../app/services/TestsApi';
 const { Title } = Typography;
 
-
 interface VacancyQuizI {
-    /* vacancyList: VacancyT[], */
+  /* vacancyList: VacancyT[], */
 }
-const getRandomInt = (max: number, min = 0) => Math.floor(Math.random() * (max - min + 1)) + min;
+const getRandomInt = (max: number, min = 0) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
 
 
 const searchResult = (query: string) =>
-    new Array(getRandomInt(5))
-        .join('.')
-        .split('.')
-        .map((_, idx) => {
-            const category = `${query}${idx}`;
-            return {
-                value: category,
-                label: (
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                        }}
-                    >
-                        <span>
-                            Найдено {query} on{' '}
-                            <a
-                                href={`https://s.taobao.com/search?q=${query}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {category}
-                            </a>
-                        </span>
-                        <span>{getRandomInt(200, 100)} results</span>
-                    </div>
-                ),
-            };
-        });
+  new Array(getRandomInt(5))
+    .join(".")
+    .split(".")
+    .map((_, idx) => {
+      const category = `${query}${idx}`;
+      return {
+        value: category,
+        label: (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <span>
+              Найдено {query} on{" "}
+              <a
+                href={`https://s.taobao.com/search?q=${query}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {category}
+              </a>
+            </span>
+            <span>{getRandomInt(200, 100)} results</span>
+          </div>
+        ),
+      };
+    });
 
 export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
+
+
     const { id } = useParams<{ id: string }>();
     const { data: test, isLoading } = useGetTestByIdQuery(id as string)
     const [activeTabKey1, setActiveTabKey1] = useState<string>('quizes');
@@ -193,24 +196,28 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
             ))
         }
     </Col>
+  );
 
-    const contentList: Record<string, React.ReactNode> = {
-        users: <p>Список пользователей</p>,
-        quizes: quizes,
-    };
+  const contentList: Record<string, React.ReactNode> = {
+    users: <p>Список пользователей</p>,
+    quizes: quizes,
+  };
 
-    return (
-        <Card className={styles.select_vacancy_wrapper}
-            style={{ width: '100%' }}
-            title={<Title level={4} style={{ margin: 0 }}>{`Название теста`}</Title>}
-            tabList={tabList}
-            activeTabKey={activeTabKey1}
-            onTabChange={onTab1Change}
-            extra={extra}
-
-        >
-            {contentList[activeTabKey1]}
-        </Card>
-    );
+  return (
+    <MainLayout>
+      <Card
+        className={styles.select_vacancy_wrapper}
+        style={{ width: "100%" }}
+        title={
+          <Title level={4} style={{ margin: 0 }}>{`Название теста`}</Title>
+        }
+        tabList={tabList}
+        activeTabKey={activeTabKey1}
+        onTabChange={onTab1Change}
+        extra={extra}
+      >
+        {contentList[activeTabKey1]}
+      </Card>
+    </MainLayout>
+  );
 };
-

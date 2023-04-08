@@ -1,0 +1,21 @@
+.login__container {
+  max-width: 500px;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+
+.login__wrapper {
+  height: calc(100vh - 64px);
+}
+
+.login__input {
+  margin: 0 0 10px 0;
+}
+
+.login__button {
+  margin: 10px 0;
+}
+.wrapper__btn {
+  display: flex;
+  justify-content: space-between;
+}
