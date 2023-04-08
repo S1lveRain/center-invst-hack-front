@@ -168,7 +168,7 @@ export const ApplicationForm: React.FC = () => {
                         </Select>
                     </div>
                 </Card>
-                <Button style={{margin: '10px', float: "right"}}>Подать заявку</Button>
+                <Button style={{width: '100%', marginTop: '10px'}} type={'primary'}>Подать заявку</Button>
             </Card>
         </div>
     );
