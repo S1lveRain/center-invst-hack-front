@@ -1,12 +1,14 @@
 import React from 'react';
 import { Card, Row } from "antd";
-import { Widget } from "../Widget/Widget";
+import { Widget } from "../../components/Widget/Widget";
 import { Simulate } from "react-dom/test-utils";
 import styles from './SelectVacancy.module.css'
 import click = Simulate.click;
 import { vacancyList } from '../../app/dataExample';
+import { Link } from 'react-router-dom';
 
 export type VacancyT = {
+    id: number,
     title: string;
     description: string
 }
@@ -24,10 +26,12 @@ export const SelectVacancy: React.FC<SelectVacancyI> = () => {
                 {
                     vacancyList.length && vacancyList.map((vacancy, index) => (
                         <a className={styles.vacancy_container} key={vacancy.title + index}>
-                            <Widget
-                             title={vacancy.description}
-                             value={vacancy.title}
-                            />
+                            <Link to={`/quiz/${vacancy.id}`}>
+                                <Widget
+                                    title={vacancy.description}
+                                    value={vacancy.title}
+                                />
+                            </Link>
                         </a>
                     ))
                 }
