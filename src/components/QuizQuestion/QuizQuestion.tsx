@@ -4,7 +4,7 @@ import styles from "./QuizQuestion.module.css";
 
 const { Title } = Typography;
 const { useToken } = theme;
-interface Option {
+export interface Option {
   id: string;
   text: string;
 }
