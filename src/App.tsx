@@ -85,24 +85,9 @@ const App: React.FC = () => {
         <Breadcrumb style={{ margin: "16px 0" }}></Breadcrumb>
         <Layout style={{ padding: "24px 0", background: colorBgContainer }}>
           <Sider style={{ background: colorBgContainer }} width={200}>
-            <Menu
-              mode="inline"
-              defaultSelectedKeys={["1"]}
-              style={{ height: "100%" }}
-            >
-              <Menu.Item key="1" icon={<DatabaseOutlined />}>
-                iOS разработчик
-              </Menu.Item>
-              <Menu.Item key="2" icon={<DatabaseOutlined />}>
-                Системный аналитик
-              </Menu.Item>
-              <Menu.Item key="3" icon={<DatabaseOutlined />}>
-                Администратор баз данных
-              </Menu.Item>
-              <Menu.Item key="4" icon={<DatabaseOutlined />}>
-                Разработчик баз данных
-              </Menu.Item>
-            </Menu>
+           
+{/* Прописать Route */}
+
           </Sider>
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
             <h1>Название направления</h1>
