@@ -14,7 +14,7 @@ import { Layout } from "antd";
 import { MainLayout } from "../../layouts/MainLayout";
 import { Nav } from "../../layouts/Nav";
 import { data } from "../../app/dataExample";
-import { useSignInMutation } from "../../app/services/authService";
+import { useSignInMutation } from "../../app/services/AuthApi";
 import { createToken, getToken } from "../../app/slices/authSlice";
 const { Header, Footer, Sider, Content } = Layout;
 

@@ -25,7 +25,7 @@ export const VacancyWindow: FC<VacancyWindowI> = ({ data }) => {
   }, [id, data]);
 
   return (
-    <MainLayout withNav>
+    <MainLayout withNav withBacking>
       {activeElement && (
         <Result
           status="success"

@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { Input, Button, Card, Radio, Checkbox, Alert } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { MainLayout } from "../../layouts/MainLayout";
-import { useSignUpMutation } from "../../app/services/authService";
+import { useSignUpMutation } from "../../app/services/AuthApi";
 import { createToken, getToken } from "../../app/slices/authSlice";
 import { Formik } from "formik";
 

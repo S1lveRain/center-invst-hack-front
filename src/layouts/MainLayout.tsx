@@ -9,8 +9,13 @@ const { Header, Content, Footer, Sider } = Layout;
 interface MainLayoutI {
   children: any;
   withNav?: boolean;
+  withBacking?: boolean;
 }
-export const MainLayout: FC<MainLayoutI> = ({ children, withNav = false }) => {
+export const MainLayout: FC<MainLayoutI> = ({
+  children,
+  withNav = false,
+  withBacking = false,
+}) => {
   const { token } = theme.useToken();
   return (
     <Layout style={{ height: "100%" }}>
@@ -19,8 +24,9 @@ export const MainLayout: FC<MainLayoutI> = ({ children, withNav = false }) => {
         <div style={{ margin: "16px 0" }} />
         <Layout
           style={{
-            padding: "20px 5px",
-            background: withNav ? token.colorBgContainer : undefined,
+            padding: "20px 20px",
+            borderRadius: 10,
+            background: withBacking ? token.colorBgContainer : undefined,
           }}
         >
           {withNav && <Nav />}
