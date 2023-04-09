@@ -13,6 +13,7 @@ import { RegisterPage } from "./pages/RegisterPage/RegisterPage";
 import { getToken } from "./app/slices/authSlice";
 import { useSelector } from "react-redux";
 import { useGetDirectionsQuery } from "./app/services/DirectionApi";
+import { ApplicationForm } from "./pages/ApplicationForm/ApplicationForm";
 
 const App: React.FC = () => {
   const select = useSelector(getToken());
@@ -30,6 +31,7 @@ const App: React.FC = () => {
         />
         <Route path="/selectVacancy/:id" element={<SelectVacancy />} />
         <Route path="/quiz/:id" element={<VacancyQuiz />} />
+        <Route path="/profile" element={<ApplicationForm />} />
       </Routes>
     );
   else

@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 // import { useSignInMutation } from "../../services/authService";
 // import { createToken, getToken } from "../../services/tokenService";
 
-import { Input, Button, Card, Alert } from "antd";
+import { Input, Button, Card, Alert, theme, Row } from "antd";
 import "./login.css";
 import { Layout } from "antd";
 import { MainLayout } from "../../layouts/MainLayout";
@@ -16,6 +16,7 @@ import { Nav } from "../../layouts/Nav";
 import { data } from "../../app/dataExample";
 import { useSignInMutation } from "../../app/services/AuthApi";
 import { createToken, getToken } from "../../app/slices/authSlice";
+import { Widget } from "./../../components/Widget/Widget";
 const { Header, Footer, Sider, Content } = Layout;
 
 const SignupSchema = Yup.object().shape({
@@ -48,7 +49,7 @@ export const LoginPage = () => {
 
   // const {data, error, isLoading} = useGetUsersQuery();
   // console.log(data, error);
-
+  const { token } = theme.useToken();
   return (
     <MainLayout>
       <div className="login__wrapper">
@@ -118,6 +119,33 @@ export const LoginPage = () => {
             Нет аккаунта? <Link to="/register">Создать аккаунт!</Link>
           </p>
         </Card>
+        <Row
+          gutter={16}
+          style={{ gap: 10, justifyContent: "center", marginTop: 20 }}
+        >
+          <Widget
+            title={"для тестирвания"}
+            value={"войти как пользователь"}
+            type="outlined"
+            pressable
+            onClick={() => {
+              signIn({ email: "anjiilop25@gmail.com", password: "18112001" })
+                .unwrap()
+                .then((data) => dispatch(createToken(data)));
+            }}
+          />
+          <Widget
+            title={"для тестирвания"}
+            value={"войти как админ"}
+            type="fill"
+            pressable
+            onClick={() => {
+              signIn({ email: "man@mail.ru", password: "12345" })
+                .unwrap()
+                .then((data) => dispatch(createToken(data)));
+            }}
+          />
+        </Row>
       </div>
     </MainLayout>
   );

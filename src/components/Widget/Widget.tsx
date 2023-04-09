@@ -10,6 +10,7 @@ interface IWidget {
   icon?: any;
   type?: "fill" | "outlined";
   pressable?: boolean;
+  onClick?: () => any;
 }
 export const Widget: FC<IWidget> = ({
   value,
@@ -18,6 +19,7 @@ export const Widget: FC<IWidget> = ({
   suffix,
   type = "fill",
   pressable = false,
+  onClick,
 }) => {
   const { token } = theme.useToken();
   return (
@@ -41,6 +43,7 @@ export const Widget: FC<IWidget> = ({
                 boxShadow: "2px 5px 8px 0px rgba(68, 129, 105, 0.3)",
               }
         }
+        onClick={onClick}
       >
         <Statistic
           title={
@@ -55,7 +58,10 @@ export const Widget: FC<IWidget> = ({
             </h4>
           }
           value={value}
-          valueStyle={{ color: "#EBFF00", fontWeight: 600 }}
+          valueStyle={{
+            color: type === "fill" ? "#EBFF00" : token.colorPrimary,
+            fontWeight: 600,
+          }}
           prefix={icon}
           suffix={suffix}
         />

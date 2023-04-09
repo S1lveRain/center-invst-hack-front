@@ -17,7 +17,7 @@ export const Nav: FC<NavI> = () => {
       >
         {direction &&
           direction.map((el, index) => (
-            <Menu.Item key={el.id + index} /* icon={<el.icon />} */>
+            <Menu.Item key={index} /* icon={<el.icon />} */>
               <Link to={`/vacancy/${el.id}`}>{el.title}</Link>
             </Menu.Item>
           ))}

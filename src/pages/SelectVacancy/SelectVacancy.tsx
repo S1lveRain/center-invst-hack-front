@@ -35,7 +35,9 @@ export const SelectVacancy: React.FC<SelectVacancyI> = () => {
                 className={styles.vacancy_container}
                 key={vacancy.name + index}
               >
-                <Link to={`/quiz/${vacancy.id}`}>
+                <Link
+                  to={`/quiz/${vacancy.tests[0] ? vacancy.tests[0].id : 0}`}
+                >
                   <Widget title={vacancy.desc} value={vacancy.name} />
                 </Link>
               </a>
