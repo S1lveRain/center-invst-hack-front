@@ -16,8 +16,7 @@ import { useGetDirectionsQuery } from "./app/services/DirectionApi";
 
 const App: React.FC = () => {
   const select = useSelector(getToken());
-  console.log("select");
-  console.log(select);
+
   const { data: direction, isLoading } = useGetDirectionsQuery("1212");
   if (select)
     return (

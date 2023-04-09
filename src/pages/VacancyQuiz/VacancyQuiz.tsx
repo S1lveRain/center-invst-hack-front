@@ -13,6 +13,9 @@ import {
     Anchor,
     Layout,
     theme,
+    Badge,
+    Descriptions,
+    Statistic,
 } from "antd";
 import { Widget } from "../../components/Widget/Widget";
 import { Simulate } from "react-dom/test-utils";
@@ -23,11 +26,12 @@ import OpenQuizQuestion from "../../components/OpenQuizQuestion/OpenQuizQuestion
 import { MultipleQuizQuestion } from "../../components/MultipleQuizQuestion/MultipleQuizQuestion";
 import QuizQuestion from "../../components/QuizQuestion/QuizQuestion";
 import { MenuProps } from "rc-menu";
-import { DownOutlined } from "@ant-design/icons";
+import { ArrowDownOutlined, ArrowUpOutlined, DownOutlined, MailOutlined } from "@ant-design/icons";
 import { useGetDirectionByIdQuery } from "../../app/services/DirectionApi";
 import { useGetTestByIdQuery } from "../../app/services/TestsApi";
 import { MainLayout } from "../../layouts/MainLayout";
 import { DefaultOptionType } from "rc-cascader";
+import { useGetUsersQuery } from "../../app/services/UserApi";
 const { Title } = Typography;
 
 interface VacancyQuizI {
@@ -37,11 +41,13 @@ interface VacancyQuizI {
 
 export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
     const { id } = useParams<{ id: string }>();
-    const { data: test, isLoading } = useGetTestByIdQuery(id as string);
+    const { data: users, } = useGetUsersQuery('1')
+    const { data: test } = useGetTestByIdQuery(id as string);
+
     const [activeTabKey1, setActiveTabKey1] = useState<string>("quizes");
     const [options, setOptions] = useState<SelectProps<object>["options"]>([]);
+    const [items, setItems] = useState(test)
 
-           
     const searchResult = ((query: string) => {
         const searchOption: SelectProps<object>["options"] = []
         test?.questions
@@ -74,9 +80,9 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
     };
 
     const onSelect = (value: string) => {
-        let indexOfSelectedItem =  test?.questions.findIndex((question) => question.text === value)
-        const element = document.getElementById(`part-${indexOfSelectedItem}`); 
-        element && element.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" }); 
+        let indexOfSelectedItem = test?.questions.findIndex((question) => question.text === value)
+        const element = document.getElementById(`part-${indexOfSelectedItem}`);
+        element && element.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
     };
 
     const onTab1Change = (key: string) => {
@@ -114,15 +120,58 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
                 options={options}
                 onSelect={onSelect}
                 onSearch={handleSearch}
-                
+
             >
                 <Input.Search size="middle" placeholder="Поиск" enterButton />
             </AutoComplete>
         </Space>
     );
+    const usersList = (
+        <Col className={styles.itemList}>
+            {
+                users && users.map((user, index) => (
+                    <Badge.Ribbon text={<div><MailOutlined /> {user.email}</div>}  >
+                        <Card bodyStyle={{backgroundColor: 'lightgray'}}
+                            title={
+                                <Descriptions title={`${user.firstName ? user.firstName : 'Имя'} ${user.lastName ? user.lastName : 'Фамилия'}`}>
+                                    <Descriptions.Item label="Пол">{user.gender}</Descriptions.Item>
+                                    <Descriptions.Item label="Возраст">{user.age}</Descriptions.Item>
+                                    <Descriptions.Item label="Роль">{user.role}</Descriptions.Item>
+                                </Descriptions>
+                            }>
 
+                            <Row gutter={5}>
+                                <Col span={4}>
+                                    <Card >
+                                        <Statistic
+                                            title="Правильных ответов"
+                                            value={11}
+                                            valueStyle={{ color: '#3f8600' }}
+                                            prefix={<ArrowUpOutlined />}
+
+                                        />
+                                    </Card>
+                                </Col>
+                                <Col span={4}>
+                                    <Card >
+                                        <Statistic
+                                            title="Неправильных ответов"
+                                            value={2}
+                                            valueStyle={{ color: '#cf1322' }}
+                                            prefix={<ArrowDownOutlined />}
+
+                                        />
+                                    </Card>
+                                </Col>
+                            </Row>
+                        </Card>
+                    </Badge.Ribbon>
+                ))
+            }
+        </Col>
+    )
     const quizes = (
-        <Col className={styles.quizList}>
+        <Col className={styles.itemList}>
             {test?.questions.length &&
                 test.questions.map((quiz, index) =>
                     quiz.type === "fill" ? (
@@ -139,7 +188,7 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
                     ) : quiz.type === "multiple" ? (
                         <div id={`part-${index}`}>
                             <MultipleQuizQuestion
-                                index = {index + 1}
+                                index={index + 1}
                                 correctAnswers={quiz.answers
                                     .filter((answer) => answer.isCorrect === true)
                                     .map((answer) => answer.text)}
@@ -152,7 +201,7 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
                         quiz.type === "single" && (
                             <div id={`part-${index}`}>
                                 <QuizQuestion
-                                   index={index + 1}
+                                    index={index + 1}
                                     correctAnswer={
                                         quiz.answers.filter(
                                             (answer) => answer.isCorrect === true
@@ -170,7 +219,7 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
     );
 
     const contentList: Record<string, React.ReactNode> = {
-        users: <p>Список пользователей</p>,
+        users: usersList,
         quizes: quizes,
     };
     const { Header, Content, Footer, Sider } = Layout;
