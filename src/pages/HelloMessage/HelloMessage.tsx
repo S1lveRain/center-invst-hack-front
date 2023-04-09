@@ -7,7 +7,7 @@ import { MainLayout } from "../../layouts/MainLayout";
 
 export const HelloMessage = () => {
   return (
-    <MainLayout withNav>
+    <MainLayout withNav withBacking>
       <Result
         status="success"
         icon={<InfoOutlined />}

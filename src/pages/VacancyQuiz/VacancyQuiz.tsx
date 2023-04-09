@@ -10,6 +10,9 @@ import {
   SelectProps,
   Typography,
   Dropdown,
+  Anchor,
+  Layout,
+  theme,
 } from "antd";
 import { Widget } from "../../components/Widget/Widget";
 import { Simulate } from "react-dom/test-utils";
@@ -175,32 +178,41 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
     <Col className={styles.quizList}>
       {test?.questions.length &&
         test.questions.map((quiz, index) =>
-          quiz.type === "open" ? (
-            <OpenQuizQuestion
-              correctAnswer={quiz.answers[0].text}
-              question={quiz.text}
-              onSubmit={() => {}}
-            />
-          ) : quiz.type === "multiple" ? (
-            <MultipleQuizQuestion
-              correctAnswers={quiz.answers
-                .filter((answer) => answer.isCorrect === true)
-                .map((answer) => answer.text)}
-              options={[...quiz.answers]}
-              question={quiz.text}
-              onSubmit={() => {}}
-            />
-          ) : (
-            quiz.type === "single" && (
-              <QuizQuestion
+          quiz.type === "fill" ? (
+            <div id={`part-${index}`}>
+              <OpenQuizQuestion
                 correctAnswer={
-                  quiz.answers.filter((answer) => answer.isCorrect === true)[0]
-                    .text
+                  quiz.answers[0] ? quiz.answers[0].text : undefined
                 }
+                question={quiz.text}
+                onSubmit={() => {}}
+              />
+            </div>
+          ) : quiz.type === "multiple" ? (
+            <div id={`part-${index}`}>
+              <MultipleQuizQuestion
+                correctAnswers={quiz.answers
+                  .filter((answer) => answer.isCorrect === true)
+                  .map((answer) => answer.text)}
                 options={[...quiz.answers]}
                 question={quiz.text}
                 onSubmit={() => {}}
               />
+            </div>
+          ) : (
+            quiz.type === "single" && (
+              <div id={`part-${index}`}>
+                <QuizQuestion
+                  correctAnswer={
+                    quiz.answers.filter(
+                      (answer) => answer.isCorrect === true
+                    )[0].text
+                  }
+                  options={[...quiz.answers]}
+                  question={quiz.text}
+                  onSubmit={() => {}}
+                />
+              </div>
             )
           )
         )}
@@ -211,22 +223,42 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
     users: <p>Список пользователей</p>,
     quizes: quizes,
   };
-
+  const { Header, Content, Footer, Sider } = Layout;
+  const { token } = theme.useToken();
   return (
-    <MainLayout>
-      <Card
-        className={styles.select_vacancy_wrapper}
-        style={{ width: "100%" }}
-        title={
-          <Title level={4} style={{ margin: 0 }}>{`Название теста`}</Title>
-        }
-        tabList={tabList}
-        activeTabKey={activeTabKey1}
-        onTabChange={onTab1Change}
-        extra={extra}
-      >
-        {contentList[activeTabKey1]}
-      </Card>
+    <MainLayout withBacking>
+      <div style={{ display: "flex" }}>
+        <Sider style={{ background: token.colorBgContainer }} width={250}>
+          <Anchor
+            items={
+              test?.questions.length
+                ? test.questions.map((quiz, index) => {
+                    return {
+                      key: `part-${index}`,
+                      href: `#part-${index}`,
+                      title: `${index + 1}. ${quiz.text}`,
+                    };
+                  })
+                : []
+            }
+          />
+        </Sider>
+        <Card
+          className={styles.select_vacancy_wrapper}
+          style={{ width: "100%" }}
+          title={
+            <Title level={4} style={{ margin: 0 }}>
+              {test?.name}
+            </Title>
+          }
+          tabList={tabList}
+          activeTabKey={activeTabKey1}
+          onTabChange={onTab1Change}
+          extra={extra}
+        >
+          {contentList[activeTabKey1]}
+        </Card>
+      </div>
     </MainLayout>
   );
 };

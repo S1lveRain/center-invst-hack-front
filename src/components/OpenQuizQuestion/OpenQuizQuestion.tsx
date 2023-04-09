@@ -7,7 +7,7 @@ const { TextArea } = Input;
 
 interface OpenQuizQuestionProps {
   question: string;
-  correctAnswer: string;
+  correctAnswer: string | undefined;
   onSubmit: (isCorrect: boolean) => void;
 }
 
@@ -23,9 +23,10 @@ const OpenQuizQuestion: React.FC<OpenQuizQuestionProps> = ({
   };
 
   const handleSubmit = () => {
-    onSubmit(
-      answer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()
-    );
+    if (correctAnswer)
+      onSubmit(
+        answer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()
+      );
   };
 
   return (
