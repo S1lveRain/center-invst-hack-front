@@ -15,6 +15,7 @@ interface QuizQuestionProps {
   options: AnswerT[];
   correctAnswer: string;
   onSubmit: (isCorrect: boolean) => void;
+  index: number,
 }
 
 interface ColoredRadioProps {
@@ -57,6 +58,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   options,
   correctAnswer,
   onSubmit,
+  index,
 }) => {
   const [selectedOption, setSelectedOption] = useState<string>("");
 
@@ -72,7 +74,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     <Card
       title={
         <Title level={4} style={{ margin: 0 }}>
-          {question}
+          {index}: {question}
         </Title>
       }
       className={styles.card}

@@ -9,12 +9,14 @@ interface OpenQuizQuestionProps {
   question: string;
   correctAnswer: string | undefined;
   onSubmit: (isCorrect: boolean) => void;
+  index?: number,
 }
 
 const OpenQuizQuestion: React.FC<OpenQuizQuestionProps> = ({
   question,
   correctAnswer,
   onSubmit,
+  index
 }) => {
   const [answer, setAnswer] = useState<string>("");
 
@@ -33,7 +35,7 @@ const OpenQuizQuestion: React.FC<OpenQuizQuestionProps> = ({
     <Card
       title={
         <Title level={4} style={{ margin: 0 }}>
-          {question}
+          {index}: {question}
         </Title>
       }
       className={styles.card}
