@@ -15,11 +15,12 @@ interface MultipleChoiceQuizQuestionProps {
   options: AnswerT[];
   correctAnswers: string[];
   onSubmit: (isCorrect: boolean) => void;
+  index?: number,
 }
 const { useToken } = theme;
 export const MultipleQuizQuestion: React.FC<
   MultipleChoiceQuizQuestionProps
-> = ({ question, options, correctAnswers, onSubmit }) => {
+> = ({ question, options, correctAnswers, onSubmit, index }) => {
   const { token } = useToken();
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
@@ -38,7 +39,7 @@ export const MultipleQuizQuestion: React.FC<
     <Card
       title={
         <Title level={4} style={{ margin: 0 }}>
-          {question}
+         {index}: {question}
         </Title>
       }
       className={styles.card}
