@@ -10,7 +10,7 @@ import { UserOutlined } from "@ant-design/icons";
 
 export const Head = () => {
     const userId = useSelector(getUser());
-    const { data: currentUser, error, isLoading } = useGetUserQuery(userId);
+    const { data: currentUser, error, isLoading } = useGetUserQuery(userId as string);
     const { token } = theme.useToken();
 
     return (

@@ -5,13 +5,13 @@
     text-align: center;
 }
 
-.quizList{
+.itemList{
     display: flex;
     flex-direction: column;
     width: 100%;
     gap: 1rem;
 
 }
-.quizList >*{
+.itemList >*{
     width: 100%;
 }
