@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Button, Typography, Radio, RadioChangeEvent, theme} from "antd";
+import { Card, Button, Typography, Radio, RadioChangeEvent, theme } from "antd";
 import styles from "./QuizQuestion.module.css";
 import { AnswerT } from "../../app/Types/DirectionType";
 
@@ -15,7 +15,7 @@ interface QuizQuestionProps {
   options: AnswerT[];
   correctAnswer: string;
   onSubmit: (isCorrect: boolean) => void;
-  index: number,
+  index: number;
 }
 
 interface ColoredRadioProps {
@@ -73,7 +73,10 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   return (
     <Card
       title={
-        <Title level={4} style={{ margin: 0 }}>
+        <Title
+          level={4}
+          style={{ margin: "10px 0", whiteSpace: "break-spaces" }}
+        >
           {index}: {question}
         </Title>
       }

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const BASE_URL = `https://invst-back.up.railway.app`;
+export const BASE_URL = `http://localhost:3000`;
 
 export const $api = axios.create({
   //   withCredentials: true,
