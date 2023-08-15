@@ -30,9 +30,6 @@ const OpenQuizQuestion: React.FC<OpenQuizQuestionProps> = ({
     const [disabledButton, setDisabledButton] = useState(false)
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setAnswer(e.target.value);
-    };
-
-    const handleSubmit = () => {
         if (correctAnswer)
             onSubmit(
                 answer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()
@@ -63,14 +60,6 @@ const OpenQuizQuestion: React.FC<OpenQuizQuestionProps> = ({
                     autoSize={{minRows: 1, maxRows: 6}}
                 />
             </div>
-            <Button
-                type="primary"
-                onClick={handleSubmit}
-                disabled={disabledButton}
-                className={styles.submitButton}
-            >
-                Ответить
-            </Button>
         </Card>
     );
 };

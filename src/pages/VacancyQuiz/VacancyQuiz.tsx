@@ -246,8 +246,8 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
     return (
         <MainLayout withBacking>
             <div style={{ display: "flex", gap: 10 }}>
-                <div>
-                    <Card style={{height: '100%', width: 350, padding: 0, borderRadius: 15}}>
+                <div style={{position: 'relative', flex: '0 0 350px', marginRight: 10}}>
+                    <Card style={{width: 350, padding: 0, borderRadius: 15, position: 'sticky', top: 10}}>
                         <div style={{display: "flex",flexDirection: 'row', gap: 10}}>
                             <h4 style={{padding: 10}}>{`Вопросы: ${answeredQuestionCount}/${test?.questions.length === undefined ? '0' : test?.questions.length}`}</h4>
                             {extra}

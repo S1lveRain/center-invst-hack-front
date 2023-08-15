@@ -74,9 +74,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 
   const handleChange = (e: RadioChangeEvent) => {
     setSelectedOption(e.target.value);
-  };
-
-  const handleSubmit = () => {
     onSubmit(selectedOption === correctAnswer);
     setDisabledButton(true)
     setAnsweredQuestionCount(answeredQuestionCount + 1)
@@ -101,14 +98,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           </ColoredRadio>
         ))}
       </Radio.Group>
-      <Button
-        type="primary"
-        onClick={handleSubmit}
-        disabled={disabledButton}
-        className={styles.submitButton}
-      >
-        Ответить
-      </Button>
     </Card>
   );
 };

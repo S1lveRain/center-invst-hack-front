@@ -36,9 +36,6 @@ export const MultipleQuizQuestion: React.FC<
     const [disabledButton, setDisabledButton] = useState(false)
     const handleChange = (checkedValues: any[]) => {
         setSelectedOptions(checkedValues);
-    };
-
-    const handleSubmit = () => {
         const isCorrect =
             selectedOptions.length === correctAnswers.length &&
             selectedOptions.every((option) => correctAnswers.includes(option));
@@ -78,14 +75,6 @@ export const MultipleQuizQuestion: React.FC<
                     </Checkbox>
                 ))}
             </Checkbox.Group>
-            <Button
-                type="primary"
-                onClick={handleSubmit}
-                disabled={disabledButton}
-                className={styles.submitButton}
-            >
-                Ответить
-            </Button>
         </Card>
     );
 };
