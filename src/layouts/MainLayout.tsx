@@ -26,7 +26,6 @@ export const MainLayout: FC<MainLayoutI> = ({
           style={{
             padding: "20px 20px",
             borderRadius: 10,
-            background: withBacking ? token.colorBgContainer : undefined,
           }}
         >
           {withNav && <Nav />}

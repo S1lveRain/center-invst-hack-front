@@ -125,7 +125,7 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
                 onSearch={handleSearch}
 
             >
-                <Input.Search size="middle" placeholder="Поиск" enterButton />
+                <Input.Search size="middle" placeholder="Поиск" enterButton style={{width: 200}}/>
             </AutoComplete>
         </Space>
     );
@@ -175,6 +175,10 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
     )
     const quizes = (
         <Col className={styles.itemList}>
+            <div style={{padding: 0}}>
+                {<h2>{test?.name}</h2>}
+                {<p>{test?.desc}</p>}
+            </div>
             {test?.questions.length &&
                 test.questions.map((quiz, index) =>
                     quiz.type === "fill" ? (
@@ -241,46 +245,34 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
     const { token } = theme.useToken();
     return (
         <MainLayout withBacking>
-            <div style={{ display: "flex" }}>
-                <Sider style={{ background: token.colorBgContainer }} width={250}>
-                    {test?.questions.length !== undefined &&
-                       (
-                           <div>
-                               <h4>{`Вопросы: ${answeredQuestionCount}/${test.questions.length}`}</h4>
-                           </div>
-                        )
-                    }
-                    <Anchor>
-                        {test?.questions.map((quiz, index) => {
-                            const textColor = answeredQuestions[index] ? '#bfbfbf' : 'black';
-                            return (
-                                <Anchor.Link
-                                    key={`part-${index}`}
-                                    href={`#part-${index}`}
-                                    title={
-                                        <span style={{ color: textColor }}>
+            <div style={{ display: "flex", gap: 10 }}>
+                <div>
+                    <Card style={{height: '100%', width: 350, padding: 0, borderRadius: 15}}>
+                        <div style={{display: "flex",flexDirection: 'row', gap: 10}}>
+                            <h4 style={{padding: 10}}>{`Вопросы: ${answeredQuestionCount}/${test?.questions.length === undefined ? '0' : test?.questions.length}`}</h4>
+                            {extra}
+                        </div>
+                        <Sider style={{ background: token.colorBgContainer }} width={250}>
+                            <Anchor>
+                                {test?.questions.map((quiz, index) => {
+                                    const textColor = answeredQuestions[index] ? '#bfbfbf' : 'black';
+                                    return (
+                                        <Anchor.Link
+                                            key={`part-${index}`}
+                                            href={`#part-${index}`}
+                                            title={
+                                                <span style={{ color: textColor }}>
                                     {`${index + 1}. ${quiz.text}`}
                                 </span>
-                                    }
-                                />
-                            );
-                        })}
-                    </Anchor>
-                </Sider>
-                <Card
-                    className={styles.select_vacancy_wrapper}
-                    style={{ width: "100%" }}
-                    title={
-                        <Title level={4} style={{ margin: 0 }}>
-                            {test?.name}
-                        </Title>
-                    }
-                    activeTabKey={activeTabKey1}
-                    onTabChange={onTab1Change}
-                    extra={extra}
-                >
+                                            }
+                                        />
+                                    );
+                                })}
+                            </Anchor>
+                        </Sider>
+                    </Card>
+                </div>
                     {contentList[activeTabKey1]}
-                </Card>
             </div>
         </MainLayout>
     );

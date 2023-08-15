@@ -87,14 +87,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 
   return (
     <Card
-      title={
-        <Title
-          level={4}
-          style={{ margin: "10px 0", whiteSpace: "break-spaces" }}
-        >
-          {index}: {question}
-        </Title>
-      }
       className={styles.card}
     >
       <Radio.Group className={styles.radioGroup}>
