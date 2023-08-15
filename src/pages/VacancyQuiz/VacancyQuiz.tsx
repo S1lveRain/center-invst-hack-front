@@ -43,7 +43,10 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
     const { id } = useParams<{ id: string }>();
     const { data: users, } = useGetUsersQuery('1')
     const { data: test } = useGetTestByIdQuery(id as string);
-
+    const [answeredQuestionCount, setAnsweredQuestionCount] = useState<number>(0);
+    const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>(
+        new Array(test?.questions.length).fill(false)
+    );
     const [activeTabKey1, setActiveTabKey1] = useState<string>("quizes");
     const [options, setOptions] = useState<SelectProps<object>["options"]>([]);
     const [items, setItems] = useState(test)
@@ -183,6 +186,10 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
                                 }
                                 question={quiz.text}
                                 onSubmit={() => { }}
+                                setAnsweredQuestionCount={setAnsweredQuestionCount}
+                                answeredQuestionCount={answeredQuestionCount}
+                                answeredQuestions={answeredQuestions}
+                                setAnsweredQuestions={setAnsweredQuestions}
                             />
                         </div>
                     ) : quiz.type === "multiple" ? (
@@ -195,6 +202,10 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
                                 options={[...quiz.answers]}
                                 question={quiz.text}
                                 onSubmit={() => { }}
+                                setAnsweredQuestionCount={setAnsweredQuestionCount}
+                                answeredQuestionCount={answeredQuestionCount}
+                                answeredQuestions={answeredQuestions}
+                                setAnsweredQuestions={setAnsweredQuestions}
                             />
                         </div>
                     ) : (
@@ -210,6 +221,10 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
                                     options={[...quiz.answers]}
                                     question={quiz.text}
                                     onSubmit={() => { }}
+                                    setAnsweredQuestionCount={setAnsweredQuestionCount}
+                                    answeredQuestionCount={answeredQuestionCount}
+                                    answeredQuestions={answeredQuestions}
+                                    setAnsweredQuestions={setAnsweredQuestions}
                                 />
                             </div>
                         )
@@ -228,19 +243,29 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
         <MainLayout withBacking>
             <div style={{ display: "flex" }}>
                 <Sider style={{ background: token.colorBgContainer }} width={250}>
-                    <Anchor
-                        items={
-                            test?.questions.length
-                                ? test.questions.map((quiz, index) => {
-                                    return {
-                                        key: `part-${index}`,
-                                        href: `#part-${index}`,
-                                        title: `${index + 1}. ${quiz.text}`,
-                                    };
-                                })
-                                : []
-                        }
-                    />
+                    {test?.questions.length !== undefined &&
+                       (
+                           <div>
+                               <h4>{`Вопросы: ${answeredQuestionCount}/${test.questions.length}`}</h4>
+                           </div>
+                        )
+                    }
+                    <Anchor>
+                        {test?.questions.map((quiz, index) => {
+                            const textColor = answeredQuestions[index] ? '#bfbfbf' : 'black';
+                            return (
+                                <Anchor.Link
+                                    key={`part-${index}`}
+                                    href={`#part-${index}`}
+                                    title={
+                                        <span style={{ color: textColor }}>
+                                    {`${index + 1}. ${quiz.text}`}
+                                </span>
+                                    }
+                                />
+                            );
+                        })}
+                    </Anchor>
                 </Sider>
                 <Card
                     className={styles.select_vacancy_wrapper}
@@ -250,7 +275,6 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
                             {test?.name}
                         </Title>
                     }
-                    tabList={tabList}
                     activeTabKey={activeTabKey1}
                     onTabChange={onTab1Change}
                     extra={extra}

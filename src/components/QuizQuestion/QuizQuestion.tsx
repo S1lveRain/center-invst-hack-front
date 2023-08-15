@@ -8,6 +8,7 @@ const { useToken } = theme;
 export interface Option {
   id: string;
   text: string;
+
 }
 
 interface QuizQuestionProps {
@@ -16,6 +17,10 @@ interface QuizQuestionProps {
   correctAnswer: string;
   onSubmit: (isCorrect: boolean) => void;
   index: number;
+  setAnsweredQuestionCount: any;
+  answeredQuestionCount: number,
+  answeredQuestions: any,
+  setAnsweredQuestions: any
 }
 
 interface ColoredRadioProps {
@@ -59,8 +64,13 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   correctAnswer,
   onSubmit,
   index,
+    setAnsweredQuestionCount,
+    answeredQuestionCount,
+    setAnsweredQuestions,
+    answeredQuestions
 }) => {
   const [selectedOption, setSelectedOption] = useState<string>("");
+  const [disabledButton, setDisabledButton] = useState(false)
 
   const handleChange = (e: RadioChangeEvent) => {
     setSelectedOption(e.target.value);
@@ -68,6 +78,11 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 
   const handleSubmit = () => {
     onSubmit(selectedOption === correctAnswer);
+    setDisabledButton(true)
+    setAnsweredQuestionCount(answeredQuestionCount + 1)
+    const updatedAnsweredQuestions = [...answeredQuestions];
+    updatedAnsweredQuestions[index - 1] = true;
+    setAnsweredQuestions(updatedAnsweredQuestions);
   };
 
   return (
@@ -97,7 +112,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       <Button
         type="primary"
         onClick={handleSubmit}
-        disabled={!selectedOption}
+        disabled={disabledButton}
         className={styles.submitButton}
       >
         Ответить
