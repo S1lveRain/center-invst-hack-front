@@ -28,6 +28,9 @@ const OpenQuizQuestion: React.FC<OpenQuizQuestionProps> = ({
                                                            }) => {
     const [answer, setAnswer] = useState<string>("");
     const [disabledButton, setDisabledButton] = useState(false)
+    const [hasAnswered, setHasAnswered] = useState(false)
+
+
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setAnswer(e.target.value);
         if (correctAnswer)
@@ -35,7 +38,7 @@ const OpenQuizQuestion: React.FC<OpenQuizQuestionProps> = ({
                 answer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()
             );
         setDisabledButton(true)
-        setAnsweredQuestionCount(answeredQuestionCount + 1)
+        setAnsweredQuestionCount(hasAnswered ? answeredQuestionCount : answeredQuestionCount + 1);
         if (typeof index !== 'undefined') {
             const updatedAnsweredQuestions = [...answeredQuestions];
             updatedAnsweredQuestions[index] = true;

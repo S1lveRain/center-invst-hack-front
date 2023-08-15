@@ -71,12 +71,14 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 }) => {
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [disabledButton, setDisabledButton] = useState(false)
+  const [hasAnswered, setHasAnswered] = useState(false)
 
   const handleChange = (e: RadioChangeEvent) => {
     setSelectedOption(e.target.value);
     onSubmit(selectedOption === correctAnswer);
     setDisabledButton(true)
-    setAnsweredQuestionCount(answeredQuestionCount + 1)
+    setHasAnswered(true)
+    setAnsweredQuestionCount(hasAnswered ? answeredQuestionCount : answeredQuestionCount + 1);
     const updatedAnsweredQuestions = [...answeredQuestions];
     updatedAnsweredQuestions[index - 1] = true;
     setAnsweredQuestions(updatedAnsweredQuestions);

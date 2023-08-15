@@ -34,6 +34,9 @@ export const MultipleQuizQuestion: React.FC<
     const {token} = useToken();
     const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
     const [disabledButton, setDisabledButton] = useState(false)
+    const [hasAnswered, setHasAnswered] = useState(false)
+
+
     const handleChange = (checkedValues: any[]) => {
         setSelectedOptions(checkedValues);
         const isCorrect =
@@ -41,7 +44,7 @@ export const MultipleQuizQuestion: React.FC<
             selectedOptions.every((option) => correctAnswers.includes(option));
         onSubmit(isCorrect);
         setDisabledButton(true)
-        setAnsweredQuestionCount(answeredQuestionCount + 1)
+        setAnsweredQuestionCount(hasAnswered ? answeredQuestionCount : answeredQuestionCount + 1);
         if (typeof index !== 'undefined') {
             const updatedAnsweredQuestions = [...answeredQuestions];
             updatedAnsweredQuestions[index] = true;
