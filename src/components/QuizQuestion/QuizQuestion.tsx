@@ -71,15 +71,14 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 }) => {
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [disabledButton, setDisabledButton] = useState(false)
+  const [hasAnswered, setHasAnswered] = useState(false)
 
   const handleChange = (e: RadioChangeEvent) => {
     setSelectedOption(e.target.value);
-  };
-
-  const handleSubmit = () => {
     onSubmit(selectedOption === correctAnswer);
     setDisabledButton(true)
-    setAnsweredQuestionCount(answeredQuestionCount + 1)
+    setHasAnswered(true)
+    setAnsweredQuestionCount(hasAnswered ? answeredQuestionCount : answeredQuestionCount + 1);
     const updatedAnsweredQuestions = [...answeredQuestions];
     updatedAnsweredQuestions[index - 1] = true;
     setAnsweredQuestions(updatedAnsweredQuestions);
@@ -87,14 +86,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 
   return (
     <Card
-      title={
-        <Title
-          level={4}
-          style={{ margin: "10px 0", whiteSpace: "break-spaces" }}
-        >
-          {index}: {question}
-        </Title>
-      }
       className={styles.card}
     >
       <Radio.Group className={styles.radioGroup}>
@@ -109,14 +100,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           </ColoredRadio>
         ))}
       </Radio.Group>
-      <Button
-        type="primary"
-        onClick={handleSubmit}
-        disabled={disabledButton}
-        className={styles.submitButton}
-      >
-        Ответить
-      </Button>
     </Card>
   );
 };
