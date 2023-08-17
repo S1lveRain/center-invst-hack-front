@@ -9,7 +9,7 @@ export const HelloMessage = () => {
   return (
     <MainLayout withNav withBacking>
       <Result
-        status="success"
+        status="info"
         icon={<InfoOutlined />}
         title={"Добро пожаловать"}
         subTitle={

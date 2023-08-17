@@ -28,17 +28,17 @@ const OpenQuizQuestion: React.FC<OpenQuizQuestionProps> = ({
                                                            }) => {
     const [answer, setAnswer] = useState<string>("");
     const [disabledButton, setDisabledButton] = useState(false)
+    const [hasAnswered, setHasAnswered] = useState(false)
+
+
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setAnswer(e.target.value);
-    };
-
-    const handleSubmit = () => {
         if (correctAnswer)
             onSubmit(
                 answer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()
             );
         setDisabledButton(true)
-        setAnsweredQuestionCount(answeredQuestionCount + 1)
+        setAnsweredQuestionCount(hasAnswered ? answeredQuestionCount : answeredQuestionCount + 1);
         if (typeof index !== 'undefined') {
             const updatedAnsweredQuestions = [...answeredQuestions];
             updatedAnsweredQuestions[index] = true;
@@ -63,14 +63,6 @@ const OpenQuizQuestion: React.FC<OpenQuizQuestionProps> = ({
                     autoSize={{minRows: 1, maxRows: 6}}
                 />
             </div>
-            <Button
-                type="primary"
-                onClick={handleSubmit}
-                disabled={disabledButton}
-                className={styles.submitButton}
-            >
-                Ответить
-            </Button>
         </Card>
     );
 };
