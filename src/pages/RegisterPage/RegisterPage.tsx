@@ -1,24 +1,26 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link,  useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Button, Card, Alert, theme, Steps, message, Input } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { MainLayout } from "../../layouts/MainLayout";
 import { useSignUpMutation } from "../../app/services/AuthApi";
-import { createToken, getToken } from "../../app/slices/authSlice";
+import { createToken, getToken, getUser } from "../../app/slices/authSlice";
 import { Formik } from "formik";
 import './register.css'
-import { firstStepFields, secondStepFields, thirdStepFields, steps } from './constants'
-import { isNextStepAvailable } from './utils'
+import { firstStepFields, secondStepFields, thirdStepFields, steps, phoneRegExp} from './constants'
+import { isSubmitBtnAvailable } from './utils'
+import { useUpdateUserMutation } from "../../app/services/UserApi";
 
 
-const phoneRegExp = /((8|\+7)-?)?\(?\d{3}\)?-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}/
+
+
 const SignupSchema = Yup.object().shape({
   email: Yup.string()
     .email("Неправильный адрес!")
     .required("Обязательное поле!"),
   password: Yup.string().required("Обязательное поле!"),
-  city: Yup.string().required("Обязательное поле!"),
+  locality: Yup.string().required("Обязательное поле!"),
   phoneNumber: Yup.string()
     .required("Обязательное поле!")
     .matches(phoneRegExp, 'Недействительный номер')
@@ -29,30 +31,34 @@ const SignupSchema = Yup.object().shape({
   lastName: Yup.string().required("Обязательное поле!"),
   age: Yup.number().required("Обязательное поле!"),
   schoolName: Yup.string().required("Обязательное поле!"),
-  classNumber: Yup.number().required("Обязательное поле!").max(11, 'Неверный класс').min(1, 'Неверный класс'),
+  schoolClass: Yup.number().required("Обязательное поле!").max(11, 'Неверный класс').min(1, 'Неверный класс'),
 });
 
 export const RegisterPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const [signUp] = useSignUpMutation();
+  const [updateUser] = useUpdateUserMutation()
   const select = useSelector(getToken());
+  const userId = useSelector(getUser())
 
   const initialValues = {
-    email: "",
-    password: "",
+    email:  '',
+    password: '',
     phoneNumber: "",
-    city: "",
+    locality: "",
     firstName: "",
     patronymic: "",
     lastName: "",
     age: "",
     schoolName: "",
-    classNumber: "",
+    schoolClass: "",
   };
 
 
   const { token } = theme.useToken();
-  const [current, setCurrent] = useState(0);
+  const initialCurrent: number = select ? 1 : 0
+  const [current, setCurrent] = useState(initialCurrent);
 
   const next = () => {
     setCurrent(current + 1);
@@ -65,21 +71,61 @@ export const RegisterPage = () => {
   const items = steps.map((item) => ({ key: item.title, title: item.title }));
 
 
-
-
-  const handleSubmit = async (content: any) => {
+  const handleNext = (values: any, errors: any) => {
+    if (current !== 0) {
+      next()
+      return
+    }
+    if (values.email && values.password) {
+      handleRegNewUser({
+        email: values.email,
+        password: values.password
+      })
+      return 
+    }
+  }
+  const handleUpdateUser = async (content: any) => {
+    console.log('userId', userId)
     console.log(content);
+
+    let copyContent = {...content}
+    delete copyContent.email
+    delete copyContent.password
+
+     updateUser({copyContent, id: userId})
+     .unwrap()
+     .then((data)=>{
+       if (data) {
+         message.success('Данные успешно обновлены')
+          navigate('/')
+      }
+     })
+     .catch((err) => {
+      message.error(err.data.message)
+     })
+   
+  }
+  const handleRegNewUser = async (content: any) => {
+    console.log(content);
+   
+
     signUp(content)
       .unwrap()
       .then((data) => {
         dispatch(createToken(data) as any)
-        message.success('Успешная регистрация!')
+        message.success('Пользователь успешно создан!')
+        next()
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        message.error(err.data.message)
+      });
   };
 
   // const {data, error, isLoading} = useGetUsersQuery();
   // console.log(data, error);
+
+
+
 
   return (
     <MainLayout>
@@ -89,7 +135,7 @@ export const RegisterPage = () => {
           <Formik
             initialValues={initialValues}
             validationSchema={SignupSchema}
-            onSubmit={handleSubmit}
+            onSubmit={handleUpdateUser}
           >
             {({
               values,
@@ -101,7 +147,7 @@ export const RegisterPage = () => {
             }) => (
               <form onSubmit={handleSubmit}>
 
-                <Steps current={current}  items={items} />
+                <Steps current={current} items={items} />
                 <div style={{ marginTop: 24 }}>
                   <>
                     {
@@ -120,7 +166,7 @@ export const RegisterPage = () => {
                                   name={item.name}
                                   placeholder={item.placeholder}
                                   value={values[item.name as keyof typeof values]}
-                                  status = {errors[item.name as keyof typeof errors] && touched[item.name as keyof typeof touched] ? 'error' : ''}
+                                  status={errors[item.name as keyof typeof errors] && touched[item.name as keyof typeof touched] ? 'error' : ''}
                                 />
                                 {errors[item.name as keyof typeof errors] && touched[item.name as keyof typeof touched] && (
                                   <Alert
@@ -154,7 +200,7 @@ export const RegisterPage = () => {
                                   name={item.name}
                                   placeholder={item.placeholder}
                                   value={values[item.name as keyof typeof values]}
-                                  status = {errors[item.name as keyof typeof errors] && touched[item.name as keyof typeof touched] ? 'error' : ''}
+                                  status={errors[item.name as keyof typeof errors] && touched[item.name as keyof typeof touched] ? 'error' : ''}
                                 />
                                 {errors[item.name as keyof typeof errors] && touched[item.name as keyof typeof touched] && (
                                   <Alert
@@ -187,7 +233,7 @@ export const RegisterPage = () => {
                                     name={item.name}
                                     placeholder={item.placeholder}
                                     value={values[item.name as keyof typeof values]}
-                                    status = {errors[item.name as keyof typeof errors] && touched[item.name as keyof typeof touched] ? 'error' : ''}
+                                    status={errors[item.name as keyof typeof errors] && touched[item.name as keyof typeof touched] ? 'error' : ''}
                                   />
                                   {errors[item.name as keyof typeof errors] && touched[item.name as keyof typeof touched] && (
                                     <Alert
@@ -207,32 +253,23 @@ export const RegisterPage = () => {
                   </>
 
                   {current < steps.length - 1 && (
-                    <Button type="primary" onClick={() => next()}>
+                    <Button type="primary" onClick={() => handleNext(values, errors)}>
                       Далее
                     </Button>
                   )}
                   {current === steps.length - 1 && (
-                    <Button type="primary"
-                      disabled={isNextStepAvailable(
-                        [
-                          errors.age,
-                          errors.city,
-                          errors.classNumber,
-                          errors.email,
-                          errors.firstName,
-                          errors.lastName,
-                          errors.patronymic,
-                          errors.phoneNumber,
-                          errors.schoolName,
-                        ]
-                      )}
-                      className="register__button"
+                    <Button
                       htmlType="submit"
-                      >
+                      type="primary"
+                      disabled={isSubmitBtnAvailable(values, errors)}
+                      className="register__button"
+                      onClick={()=> handleUpdateUser(values)}
+                      
+                    >
                       Перейти к тестированию
                     </Button>
                   )}
-                  {current > 0 && (
+                  {current > 1 && (
                     <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
                       Назад
                     </Button>

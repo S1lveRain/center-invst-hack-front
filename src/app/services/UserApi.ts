@@ -19,7 +19,15 @@ export const userAPI = createApi({
       }),
       providesTags: (result) => ["User"],
     }),
+    updateUser: build.mutation({
+      query: ({content, id}) => ({
+        url: `users/${id}`,
+        method: "PUT",
+        body: content,
+      }),
+      
+    })
   }),
 });
 
-export const { useGetUserQuery, useGetUsersQuery } = userAPI;
+export const { useGetUserQuery, useGetUsersQuery, useUpdateUserMutation } = userAPI;

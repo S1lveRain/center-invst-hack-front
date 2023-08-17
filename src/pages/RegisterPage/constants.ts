@@ -7,16 +7,16 @@ interface RegStepI{
 
  const steps = [
     {
-      title: 'Контакты',
+      title: 'Регистрация',
     },
     {
-      title: 'Персональные данные',
+      title: 'Личные данные',
     },
     {
       title: 'Образование',
     },
   ];
-
+const phoneRegExp = /((8|\+7)-?)?\(?\d{3}\)?-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}/
 const firstStepFields: RegStepI[] = [
     {
       type: 'email',
@@ -50,17 +50,18 @@ const firstStepFields: RegStepI[] = [
       name: 'age',
       type: 'number',
       placeholder: 'ваш возраст'
-    }
-  ]
-  const thirdStepFields: RegStepI[] = [
+    },
     {
       type: 'text',
       name: 'phoneNumber',
       placeholder: 'ваш номер телефона',
     },
+  ]
+  const thirdStepFields: RegStepI[] = [
+
     {
       type: 'text',
-      name: 'city',
+      name: 'locality',
       placeholder: 'наименование вашего населённого пункта'
     },
     {
@@ -69,11 +70,11 @@ const firstStepFields: RegStepI[] = [
       type: 'text',
     },
     {
-      name: 'classNumber',
+      name: 'schoolClass',
       placeholder: 'класс',
       type: 'number',
     },
    
   ]
 
-  export {firstStepFields, secondStepFields, thirdStepFields, steps};
+  export {firstStepFields, secondStepFields, thirdStepFields, steps, phoneRegExp};
