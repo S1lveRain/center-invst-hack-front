@@ -201,8 +201,10 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
   const quizes = (
     <Col className={styles.itemList}>
       <div style={{ padding: 0 }}>
-        {<h2>{test?.name}</h2>}
-        {<p>{test?.desc}</p>}
+        <h2 style={{ marginBottom: 0 }}>{test?.name}</h2>
+        <h3 style={{ fontWeight: 400, marginBottom: 5, marginTop: 5 }}>
+          {test?.desc}
+        </h3>
       </div>
       {test?.questions.length &&
         test.questions.map((quiz, index) =>
@@ -267,25 +269,29 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
   return (
     <MainLayout withBacking>
       <div style={{ display: "flex", gap: 10 }}>
-        <div
-          style={{ position: "relative", flex: "0 0 350px", marginRight: 10 }}
-        >
+        <div style={{ position: "relative", marginRight: 10 }}>
           <Card
             style={{
-              width: 350,
               padding: 0,
               borderRadius: 15,
               position: "sticky",
-              top: 10,
+              top: 20,
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
             }}
           >
-            <div style={{ display: "flex", flexDirection: "row", gap: 10 }}>
-              <h4 style={{ padding: 10 }}>{`Вопросы: ${answeredQuestionCount}/${
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                gap: 10,
+                marginBottom: 20,
+              }}
+            >
+              <h3 style={{ margin: 0 }}>{`Вопросы: ${answeredQuestionCount}/${
                 test?.questions.length === undefined
                   ? "0"
                   : test?.questions.length
-              }`}</h4>
-              {extra}
+              }`}</h3>
             </div>
             <Sider style={{ background: token.colorBgContainer }} width={250}>
               <Anchor>
