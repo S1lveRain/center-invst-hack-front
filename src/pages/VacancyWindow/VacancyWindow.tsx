@@ -28,7 +28,6 @@ export const VacancyWindow: FC<VacancyWindowI> = ({ data }) => {
     <MainLayout withNav withBacking>
       {activeElement && (
         <Result
-          status="success"
           /* icon={<activeElement.icon />} */
           title={activeElement.title}
           subTitle={activeElement.desc}

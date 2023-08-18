@@ -1,7 +1,6 @@
 import { Header } from "antd/es/layout/layout";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/1200x630wa.png";
 import { Avatar, theme } from "antd";
 import { useSelector } from "react-redux";
 import { getUser } from "../app/slices/authSlice";
@@ -9,67 +8,61 @@ import { useGetUserQuery } from "../app/services/UserApi";
 import { UserOutlined } from "@ant-design/icons";
 
 export const Head = () => {
-    const userId = useSelector(getUser());
-    const { data: currentUser, error, isLoading } = useGetUserQuery(userId as string);
-    const { token } = theme.useToken();
+  const userId = useSelector(getUser());
+  const {
+    data: currentUser,
+    error,
+    isLoading,
+  } = useGetUserQuery(userId as string);
+  const { token } = theme.useToken();
 
-    return (
-        <Header
-            className="header"
-            style={{
-                backgroundColor: "white",
-                display: "flex",
-                justifyContent: "space-between",
-            }}
-        >
-            <Link to={"/"} style={{ display: "flex", alignItems: "center" }}>
-                <img
-                    src={logo}
-                    style={{
-                        width: 35,
-                        height: 35,
-                        backgroundPosition: "center",
-                        margin: 10,
-                    }}
-                    alt={"broken"}
-                />
-                <h1 style={{ color: "#13AA09", margin: 0 }}>Work</h1>
-            </Link>
+  return (
+    <Header
+      className="header"
+      style={{
+        backgroundColor: "white",
+        display: "flex",
+        justifyContent: "space-between",
+        zIndex: 1,
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+      }}
+    >
+      <Link to={"/"} style={{ display: "flex", alignItems: "center" }}>
+        <h1 style={{ color: "#167AFF", margin: 0 }}>ТЕСТ ДГТУ</h1>
+      </Link>
 
-            <div
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          color: "#167AFF",
+          margin: 0,
+        }}
+      >
+        {isLoading ? (
+          <>Loading...</>
+        ) : (
+          <div>
+            {currentUser && (
+              <h4 style={{ margin: "-15px 10px 0 0" }}>{currentUser.email}</h4>
+            )}
+            {currentUser && (
+              <p
                 style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    color: "#13AA09",
-                    margin: 0,
+                  margin: "-10px 0 0 0",
+                  position: "absolute",
+                  right: 95,
+                  top: 20,
                 }}
-            >
-                {isLoading ? (
-                    <>Loading...</>
-                ) : (
-                    <div>
-                        {currentUser && <h4 style={{ margin: "-15px 10px 0 0" }}>{currentUser.email}</h4>}
-                        {currentUser && <p
-                            style={{
-                                margin: "-10px 0 0 0",
-                                position: "absolute",
-                                right: 105,
-                                top: 20,
-                            }}
-                        >
-                            {currentUser.role}
-                        </p>}
-                    </div>
-                )}
-                {currentUser && (
-                    <Avatar
-                        size="default"
-                        icon={<UserOutlined />}
-                        style={{ margin: "0 10px 0 0" }}
-                    />
-                )}
-            </div>
-        </Header>
-    );
+              >
+                {currentUser.role}
+              </p>
+            )}
+          </div>
+        )}
+        {currentUser && <Avatar size="default" icon={<UserOutlined />} />}
+      </div>
+    </Header>
+  );
 };

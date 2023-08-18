@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Button, Typography, Radio, RadioChangeEvent, theme} from "antd";
+import { Card, Button, Typography, Radio, RadioChangeEvent, theme } from "antd";
 import styles from "./QuizQuestion.module.css";
 import { AnswerT } from "../../app/Types/DirectionType";
 
@@ -8,6 +8,7 @@ const { useToken } = theme;
 export interface Option {
   id: string;
   text: string;
+
 }
 
 interface QuizQuestionProps {
@@ -15,7 +16,11 @@ interface QuizQuestionProps {
   options: AnswerT[];
   correctAnswer: string;
   onSubmit: (isCorrect: boolean) => void;
-  index: number,
+  index: number;
+  setAnsweredQuestionCount: any;
+  answeredQuestionCount: number,
+  answeredQuestions: any,
+  setAnsweredQuestions: any
 }
 
 interface ColoredRadioProps {
@@ -59,24 +64,28 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   correctAnswer,
   onSubmit,
   index,
+    setAnsweredQuestionCount,
+    answeredQuestionCount,
+    setAnsweredQuestions,
+    answeredQuestions
 }) => {
   const [selectedOption, setSelectedOption] = useState<string>("");
+  const [disabledButton, setDisabledButton] = useState(false)
+  const [hasAnswered, setHasAnswered] = useState(false)
 
   const handleChange = (e: RadioChangeEvent) => {
     setSelectedOption(e.target.value);
-  };
-
-  const handleSubmit = () => {
     onSubmit(selectedOption === correctAnswer);
+    setDisabledButton(true)
+    setHasAnswered(true)
+    setAnsweredQuestionCount(hasAnswered ? answeredQuestionCount : answeredQuestionCount + 1);
+    const updatedAnsweredQuestions = [...answeredQuestions];
+    updatedAnsweredQuestions[index - 1] = true;
+    setAnsweredQuestions(updatedAnsweredQuestions);
   };
 
   return (
     <Card
-      title={
-        <Title level={4} style={{ margin: 0 }}>
-          {index}: {question}
-        </Title>
-      }
       className={styles.card}
     >
       <Radio.Group className={styles.radioGroup}>
@@ -91,14 +100,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           </ColoredRadio>
         ))}
       </Radio.Group>
-      <Button
-        type="primary"
-        onClick={handleSubmit}
-        disabled={!selectedOption}
-        className={styles.submitButton}
-      >
-        Ответить
-      </Button>
     </Card>
   );
 };
