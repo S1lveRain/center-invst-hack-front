@@ -16,6 +16,7 @@ import {
   Badge,
   Descriptions,
   Statistic,
+  Spin,
 } from "antd";
 import { Widget } from "../../components/Widget/Widget";
 import { Simulate } from "react-dom/test-utils";
@@ -285,34 +286,44 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
                 flexDirection: "row",
                 gap: 10,
                 marginBottom: 20,
+                minWidth: 250,
               }}
             >
-              <h3 style={{ margin: 0 }}>{`Вопросы: ${answeredQuestionCount}/${
-                test?.questions.length === undefined
-                  ? "0"
-                  : test?.questions.length
-              }`}</h3>
+              <h3 style={{ margin: "auto" }}>
+                {`Вопросы - `}
+                {test
+                  ? `${answeredQuestionCount}/${
+                      test?.questions.length === undefined
+                        ? "0"
+                        : test?.questions.length
+                    }`
+                  : "загрузка"}
+              </h3>
             </div>
-            <Sider style={{ background: token.colorBgContainer }} width={250}>
-              <Anchor>
-                {test?.questions.map((quiz, index) => {
-                  const textColor = answeredQuestions[index]
-                    ? "#bfbfbf"
-                    : "black";
-                  return (
-                    <Anchor.Link
-                      key={`part-${index}`}
-                      href={`#part-${index}`}
-                      title={
-                        <span style={{ color: textColor }}>
-                          {`${index + 1}. ${quiz.text}`}
-                        </span>
-                      }
-                    />
-                  );
-                })}
-              </Anchor>
-            </Sider>
+            {test ? (
+              <Sider style={{ background: token.colorBgContainer }} width={250}>
+                <Anchor>
+                  {test?.questions.map((quiz, index) => {
+                    const textColor = answeredQuestions[index]
+                      ? "#bfbfbf"
+                      : "black";
+                    return (
+                      <Anchor.Link
+                        key={`part-${index}`}
+                        href={`#part-${index}`}
+                        title={
+                          <span style={{ color: textColor }}>
+                            {`${index + 1}. ${quiz.text}`}
+                          </span>
+                        }
+                      />
+                    );
+                  })}
+                </Anchor>
+              </Sider>
+            ) : (
+              <Spin size="large" style={{ width: "100%" }} />
+            )}
           </Card>
         </div>
         {contentList[activeTabKey1]}

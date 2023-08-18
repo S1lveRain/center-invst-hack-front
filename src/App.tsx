@@ -10,28 +10,44 @@ import { VacancyQuiz } from "./pages/VacancyQuiz/VacancyQuiz";
 import { HelloMessage } from "./pages/HelloMessage/HelloMessage";
 import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage/RegisterPage";
-import { getToken } from "./app/slices/authSlice";
+import { getToken, getUser } from "./app/slices/authSlice";
 import { useSelector } from "react-redux";
 import { useGetDirectionsQuery } from "./app/services/DirectionApi";
+import { useGetUserQuery } from "./app/services/UserApi";
 
 const App: React.FC = () => {
   const select = useSelector(getToken());
+  const userId = useSelector(getUser());
+  const { data: currentUser } = useGetUserQuery(userId as string);
+  const { data: direction } = useGetDirectionsQuery("1212");
 
-  const { data: direction, isLoading } = useGetDirectionsQuery("1212");
   if (select)
-    return (
-      <Routes>
-        <Route path="/login" element={<Navigate to="/" replace />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/" element={<HelloMessage />} />
-        <Route
-          path="/vacancy/:id"
-          element={<VacancyWindow data={direction} />}
-        />
-        <Route path="/selectVacancy/:id" element={<SelectVacancy />} />
-        <Route path="/quiz/:id" element={<VacancyQuiz />} />
-      </Routes>
-    );
+    if (currentUser && currentUser.role === "admin")
+      return (
+        <Routes>
+          <Route path="/login" element={<Navigate to="/" replace />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/" element={<HelloMessage />} />
+          <Route
+            path="/vacancy/:id"
+            element={<VacancyWindow data={direction} />}
+          />
+          <Route path="/selectVacancy/:id" element={<SelectVacancy />} />
+          <Route path="/quiz/:id" element={<VacancyQuiz />} />
+        </Routes>
+      );
+    else
+      return (
+        <Routes>
+          <Route path="/login" element={<Navigate to="/" replace />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route
+            path="/"
+            element={<HelloMessage isPlainUser user={currentUser} />}
+          />
+          <Route path="/quiz/:id" element={<VacancyQuiz />} />
+        </Routes>
+      );
   else
     return (
       <Routes>
