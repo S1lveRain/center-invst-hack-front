@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Link,  useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Button, Card, Alert, theme, Steps, message, Input } from "antd";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { MainLayout } from "../../layouts/MainLayout";
 import { useSignUpMutation } from "../../app/services/AuthApi";
-import { createToken, getToken, getUser } from "../../app/slices/authSlice";
+import { createToken } from "../../app/slices/authSlice";
 import { Formik } from "formik";
 import './register.css'
-import { firstStepFields, secondStepFields, thirdStepFields, steps, phoneRegExp} from './constants'
+import { firstStepFields, secondStepFields, thirdStepFields, steps, phoneRegExp } from './constants'
 import { isSubmitBtnAvailable } from './utils'
 import { useUpdateUserMutation } from "../../app/services/UserApi";
 
@@ -39,11 +39,9 @@ export const RegisterPage = () => {
   const navigate = useNavigate()
   const [signUp] = useSignUpMutation();
   const [updateUser] = useUpdateUserMutation()
-  const select = useSelector(getToken());
-  const userId = useSelector(getUser())
 
   const initialValues = {
-    email:  '',
+    email: '',
     password: '',
     phoneNumber: "",
     locality: "",
@@ -57,8 +55,7 @@ export const RegisterPage = () => {
 
 
   const { token } = theme.useToken();
-  const initialCurrent: number = select ? 1 : 0
-  const [current, setCurrent] = useState(initialCurrent);
+  const [current, setCurrent] = useState(0);
 
   const next = () => {
     setCurrent(current + 1);
@@ -71,61 +68,39 @@ export const RegisterPage = () => {
   const items = steps.map((item) => ({ key: item.title, title: item.title }));
 
 
-  const handleNext = (values: any, errors: any) => {
-    if (current !== 0) {
-      next()
-      return
-    }
-    if (values.email && values.password) {
-      handleRegNewUser({
-        email: values.email,
-        password: values.password
-      })
-      return 
-    }
-  }
-  const handleUpdateUser = async (content: any) => {
-    console.log('userId', userId)
-    console.log(content);
-
-    let copyContent = {...content}
-    delete copyContent.email
-    delete copyContent.password
-
-     updateUser({copyContent, id: userId})
-     .unwrap()
-     .then((data)=>{
-       if (data) {
-         message.success('Данные успешно обновлены')
-          navigate('/')
-      }
-     })
-     .catch((err) => {
-      message.error(err.data.message)
-     })
-   
-  }
-  const handleRegNewUser = async (content: any) => {
-    console.log(content);
-   
-
-    signUp(content)
+  const handleSubmit = async (content: any) => {
+    let userId = ''
+    signUp({
+      email: content.email,
+      password: content.password
+    })
       .unwrap()
       .then((data) => {
         dispatch(createToken(data) as any)
         message.success('Пользователь успешно создан!')
-        next()
+        userId = data.user.id
       })
       .catch((err) => {
         message.error(err.data.message)
-      });
+      })
+      .then(
+        () => {
+          if (userId) {
+            updateUser({ content, id: userId })
+              .unwrap()
+              .then((data) => {
+                if (data) {
+                  message.success('Данные успешно обновлены')
+                  navigate('/')
+                }
+              })
+              .catch((err) => {
+                message.error(err.data.message)
+              })
+          }
+        }
+      )
   };
-
-  // const {data, error, isLoading} = useGetUsersQuery();
-  // console.log(data, error);
-
-
-
 
   return (
     <MainLayout>
@@ -135,7 +110,7 @@ export const RegisterPage = () => {
           <Formik
             initialValues={initialValues}
             validationSchema={SignupSchema}
-            onSubmit={handleUpdateUser}
+            onSubmit={handleSubmit}
           >
             {({
               values,
@@ -253,7 +228,7 @@ export const RegisterPage = () => {
                   </>
 
                   {current < steps.length - 1 && (
-                    <Button type="primary" onClick={() => handleNext(values, errors)}>
+                    <Button type="primary" onClick={() => next()}>
                       Далее
                     </Button>
                   )}
@@ -263,8 +238,6 @@ export const RegisterPage = () => {
                       type="primary"
                       disabled={isSubmitBtnAvailable(values, errors)}
                       className="register__button"
-                      onClick={()=> handleUpdateUser(values)}
-                      
                     >
                       Перейти к тестированию
                     </Button>
