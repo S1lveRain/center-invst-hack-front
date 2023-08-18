@@ -1,17 +1,16 @@
-.select_vacancy_wrapper{
-    align-items: center;
+.select_vacancy_wrapper {
+  align-items: center;
 }
-.select_vacancy_title{
-    text-align: center;
+.select_vacancy_title {
+  text-align: center;
 }
 
-.itemList{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 1rem;
-
+.itemList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 20px;
 }
-.itemList >*{
-    width: 100%;
+.itemList > * {
+  width: 100%;
 }

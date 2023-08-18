@@ -23,6 +23,8 @@ export const Head = () => {
         backgroundColor: "white",
         display: "flex",
         justifyContent: "space-between",
+        zIndex: 1,
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
       }}
     >
       <Link to={"/"} style={{ display: "flex", alignItems: "center" }}>

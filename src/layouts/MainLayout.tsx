@@ -20,8 +20,8 @@ export const MainLayout: FC<MainLayoutI> = ({
   return (
     <Layout style={{ height: "100%" }}>
       <Head />
-      <Content style={{ padding: "0 50px" }}>
-        <div style={{ margin: "16px 0" }} />
+      <Content style={{}}>
+        <div style={{}} />
         <Layout
           style={{
             padding: "20px 20px",
