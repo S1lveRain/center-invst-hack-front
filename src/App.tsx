@@ -14,12 +14,15 @@ import { getToken, getUser } from "./app/slices/authSlice";
 import { useSelector } from "react-redux";
 import { useGetDirectionsQuery } from "./app/services/DirectionApi";
 import { useGetUserQuery } from "./app/services/UserApi";
+import { TestsResult } from "./pages/TestsResult/TestsResults";
 
 const App: React.FC = () => {
   const select = useSelector(getToken());
   const userId = useSelector(getUser());
   const { data: currentUser } = useGetUserQuery(userId as string);
-  const { data: direction } = useGetDirectionsQuery("1212");
+  const { data: direction, isLoading } = useGetDirectionsQuery('');
+
+  console.log(currentUser)
 
   if (select)
     if (currentUser && currentUser.role === "admin")
@@ -30,10 +33,11 @@ const App: React.FC = () => {
           <Route path="/" element={<HelloMessage />} />
           <Route
             path="/vacancy/:id"
-            element={<VacancyWindow data={direction} />}
+            element={<VacancyWindow data={direction} withNav={true} />}
           />
           <Route path="/selectVacancy/:id" element={<SelectVacancy />} />
           <Route path="/quiz/:id" element={<VacancyQuiz />} />
+          <Route path="/testsResult" element={<TestsResult data={direction} />} />
         </Routes>
       );
     else
@@ -45,6 +49,7 @@ const App: React.FC = () => {
             path="/"
             element={<HelloMessage isPlainUser user={currentUser} />}
           />
+          <Route path="/testsResult" element={<TestsResult data={direction} isLoading />} />
           <Route path="/quiz/:id" element={<VacancyQuiz />} />
         </Routes>
       );

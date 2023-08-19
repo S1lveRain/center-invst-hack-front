@@ -17,6 +17,7 @@ export const testsApi = createApi({
         url: `/tests/${id}`,
       }),
     }),
+   
   }),
 });
 
