@@ -1,9 +1,10 @@
-import React, {useState} from "react";
-import {Card, Checkbox, Button, Typography, theme} from "antd";
+import React, { useState } from "react";
+import { Card, Checkbox, Typography, theme } from "antd";
 import styles from "./MultipleQuizQuestion.module.css";
-import {AnswerT} from "../../app/Types/DirectionType";
+import { AnswerT } from "../../app/Types/DirectionType";
+import { CheckboxValueType } from "antd/lib/checkbox/Group";
 
-const {Title} = Typography;
+const { Title } = Typography;
 
 interface Option {
     id: string;
@@ -15,37 +16,45 @@ interface MultipleChoiceQuizQuestionProps {
     options: AnswerT[];
     correctAnswers: string[];
     onSubmit: (isCorrect: boolean) => void;
-    index?: number,
-    setAnsweredQuestionCount: any,
-    answeredQuestionCount: number,
-    answeredQuestions: any,
-    setAnsweredQuestions: any
+    index?: number;
+    setAnsweredQuestionCount: any;
+    answeredQuestionCount: number;
+    answeredQuestions: any;
+    setAnsweredQuestions: any;
 }
 
-const {useToken} = theme;
+const { useToken } = theme;
 export const MultipleQuizQuestion: React.FC<
     MultipleChoiceQuizQuestionProps
 > = ({
-         question, options, correctAnswers, onSubmit, index, setAnsweredQuestionCount,
+         question,
+         options,
+         correctAnswers,
+         onSubmit,
+         index,
+         setAnsweredQuestionCount,
          answeredQuestionCount,
          answeredQuestions,
-         setAnsweredQuestions
+         setAnsweredQuestions,
      }) => {
-    const {token} = useToken();
-    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-    const [disabledButton, setDisabledButton] = useState(false)
-    const [hasAnswered, setHasAnswered] = useState(false)
+    const { token } = useToken();
+    const [selectedOptions, setSelectedOptions] = useState<CheckboxValueType[]>(
+        []
+    );
+    const [disabledButton, setDisabledButton] = useState(false);
+    const [hasAnswered, setHasAnswered] = useState(false);
 
-
-    const handleChange = (checkedValues: any[]) => {
+    const handleChange = (checkedValues: CheckboxValueType[]) => {
         setSelectedOptions(checkedValues);
         const isCorrect =
             selectedOptions.length === correctAnswers.length &&
-            selectedOptions.every((option) => correctAnswers.includes(option));
+            selectedOptions.every((option) => correctAnswers.includes(option as string));
         onSubmit(isCorrect);
-        setDisabledButton(true)
-        setAnsweredQuestionCount(hasAnswered ? answeredQuestionCount : answeredQuestionCount + 1);
-        if (typeof index !== 'undefined') {
+        setDisabledButton(true);
+        setAnsweredQuestionCount(
+            hasAnswered ? answeredQuestionCount : answeredQuestionCount + 1
+        );
+        if (typeof index !== "undefined") {
             const updatedAnsweredQuestions = [...answeredQuestions];
             updatedAnsweredQuestions[index] = true;
             setAnsweredQuestions(updatedAnsweredQuestions);
@@ -55,7 +64,7 @@ export const MultipleQuizQuestion: React.FC<
     return (
         <Card
             title={
-                <Title level={4} style={{margin: 0}}>
+                <Title level={4} style={{ margin: 0 }}>
                     {index}: {question}
                 </Title>
             }
@@ -69,7 +78,7 @@ export const MultipleQuizQuestion: React.FC<
                         className={styles.checkbox}
                         style={{
                             margin: 0,
-                            backgroundColor: selectedOptions.includes(String(option.id))
+                            backgroundColor: selectedOptions.includes(option.id)
                                 ? token.colorFill
                                 : "transparent",
                         }}
