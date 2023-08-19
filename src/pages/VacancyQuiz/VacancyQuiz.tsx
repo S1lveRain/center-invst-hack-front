@@ -37,10 +37,17 @@ import { useGetTestByIdQuery } from "../../app/services/TestsApi";
 import { MainLayout } from "../../layouts/MainLayout";
 import { DefaultOptionType } from "rc-cascader";
 import { useGetUsersQuery } from "../../app/services/UserApi";
+import { useSaveAnswersMutation } from "../../app/services/TestsApi";
+import {RootState, store } from "../../app/store";
+import { useSelector } from "react-redux";
 const { Title } = Typography;
 
 interface VacancyQuizI {
   /* vacancyList: VacancyT[], */
+}
+
+interface AnswersState {
+  [questionIndex: number]: string | string[] | boolean;
 }
 
 export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
@@ -54,6 +61,28 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
   const [activeTabKey1, setActiveTabKey1] = useState<string>("quizes");
   const [options, setOptions] = useState<SelectProps<object>["options"]>([]);
   const [items, setItems] = useState(test);
+  const [saveAnswers, { isLoading }] = useSaveAnswersMutation();
+  const [answers, setAnswers] = useState<AnswersState>({});
+
+
+  const quizAnswers = useSelector((state: RootState) => state.quiz.answers);
+
+  // ...
+
+  const sendAnswers = async () => {
+    try {
+      // Отправка ответов на сервер
+      console.log(quizAnswers)
+      await saveAnswers({
+        answers: quizAnswers,
+        testId: id,
+      });
+    } catch (error) {
+      console.error("Произошла ошибка:", error);
+      // Обработка ошибки
+    }
+  };
+
 
   const searchResult = (query: string) => {
     const searchOption: SelectProps<object>["options"] = [];
@@ -214,7 +243,10 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
                   quiz.answers[0] ? quiz.answers[0].text : undefined
                 }
                 question={quiz.text}
-                onSubmit={() => {}}
+                onSubmit={(selectedAnswer) => {
+                  const updatedAnswers = { ...answers, [index]: selectedAnswer };
+                  setAnswers(updatedAnswers);
+                }}
                 setAnsweredQuestionCount={setAnsweredQuestionCount}
                 answeredQuestionCount={answeredQuestionCount}
                 answeredQuestions={answeredQuestions}
@@ -230,7 +262,10 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
                   .map((answer) => answer.text)}
                 options={[...quiz.answers]}
                 question={quiz.text}
-                onSubmit={() => {}}
+                onSubmit={(selectedAnswer) => {
+                  const updatedAnswers = { ...answers, [index]: selectedAnswer };
+                  setAnswers(updatedAnswers);
+                }}
                 setAnsweredQuestionCount={setAnsweredQuestionCount}
                 answeredQuestionCount={answeredQuestionCount}
                 answeredQuestions={answeredQuestions}
@@ -245,7 +280,13 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
                   correctAnswer={quiz.answers[0].text}
                   options={[...quiz.answers]}
                   question={quiz.text}
-                  onSubmit={() => {}}
+                  onSubmit={(selectedAnswers) => {
+                    setAnswers((prevAnswers) => {
+                      const updatedAnswers = { ...prevAnswers };
+                      updatedAnswers[index] = selectedAnswers;
+                      return updatedAnswers;
+                    });
+                  }}
                   setAnsweredQuestionCount={setAnsweredQuestionCount}
                   answeredQuestionCount={answeredQuestionCount}
                   answeredQuestions={answeredQuestions}
@@ -311,6 +352,9 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
         </div>
         {contentList[activeTabKey1]}
       </div>
+      <Button type="primary" onClick={sendAnswers} disabled={isLoading}>
+        Отправить ответы
+      </Button>
     </MainLayout>
   );
 };

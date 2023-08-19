@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { Card, Button, Typography, Radio, RadioChangeEvent, theme } from "antd";
 import styles from "./QuizQuestion.module.css";
 import { AnswerT } from "../../app/Types/DirectionType";
+import { useSaveAnswersMutation } from "../../app/services/TestsApi";
+import { Answer, addAnswer } from "../../app/slices/quizSlice";
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const { Title } = Typography;
 const { useToken } = theme;
@@ -70,19 +74,43 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     answeredQuestions
 }) => {
   const [selectedOption, setSelectedOption] = useState<string>("");
-  const [disabledButton, setDisabledButton] = useState(false)
-  const [hasAnswered, setHasAnswered] = useState(false)
+  const [saveAnswers, { isLoading: isSaving }] = useSaveAnswersMutation();
+  const [disabledButton, setDisabledButton] = useState(false);
+  const [hasAnswered, setHasAnswered] = useState(false);
+  const { testId } = useParams(); // Изменилась часть получения testId
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>(
+      {}
+  );
+  const [answeredLog, setAnsweredLog] = useState<number[]>([]);
+  const dispatch = useDispatch();
 
   const handleChange = (e: RadioChangeEvent) => {
-    setSelectedOption(e.target.value);
-    onSubmit(selectedOption === correctAnswer);
-    setDisabledButton(true)
-    setHasAnswered(true)
-    setAnsweredQuestionCount(hasAnswered ? answeredQuestionCount : answeredQuestionCount + 1);
-    const updatedAnsweredQuestions = [...answeredQuestions];
-    updatedAnsweredQuestions[index - 1] = true;
-    setAnsweredQuestions(updatedAnsweredQuestions);
+    const selectedValue = e.target.value;
+
+    setSelectedOption(selectedValue);
+    setHasAnswered(true);
+
+    const updatedLog = hasAnswered ? answeredLog : [...answeredLog, index];
+    setAnsweredLog(updatedLog);
+
+    const updatedAnswers: Record<string, string> = {};
+    updatedLog.forEach((answeredIndex) => {
+      updatedAnswers[answeredIndex] = selectedAnswers[answeredIndex] || "";
+    });
+    updatedAnswers[index] = selectedValue;
+    setSelectedAnswers(updatedAnswers);
+
+    const answer = {
+      questionId: index,
+      answerIds: [parseInt(selectedValue, 10)], // Преобразование в число
+    };
+
+    dispatch(addAnswer(answer)); // Отправка экшена в Redux
+
+    onSubmit(selectedValue === correctAnswer);
+    setDisabledButton(true);
   };
+
 
   return (
     <Card
@@ -105,3 +133,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 };
 
 export default QuizQuestion;
+function dispatch(arg0: any) {
+    throw new Error("Function not implemented.");
+}
+
