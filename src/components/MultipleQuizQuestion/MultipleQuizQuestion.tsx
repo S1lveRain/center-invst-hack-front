@@ -3,6 +3,8 @@ import { Card, Checkbox, Typography, theme } from "antd";
 import styles from "./MultipleQuizQuestion.module.css";
 import { AnswerT } from "../../app/Types/DirectionType";
 import { CheckboxValueType } from "antd/lib/checkbox/Group";
+import { useDispatch } from "react-redux";
+import { addAnswer } from "../../app/slices/quizSlice"; // Import the action from your slice
 
 const { Title } = Typography;
 
@@ -44,6 +46,10 @@ export const MultipleQuizQuestion: React.FC<
     const [disabledButton, setDisabledButton] = useState(false);
     const [hasAnswered, setHasAnswered] = useState(false);
 
+    const dispatch = useDispatch(); // Get the dispatch function
+
+    // ... rest of the component ...
+
     const handleChange = (checkedValues: CheckboxValueType[]) => {
         setSelectedOptions(checkedValues);
         const isCorrect =
@@ -59,7 +65,15 @@ export const MultipleQuizQuestion: React.FC<
             updatedAnsweredQuestions[index] = true;
             setAnsweredQuestions(updatedAnsweredQuestions);
         }
+
+        // Dispatch the selected answers to Redux store
+        const answer = {
+            questionId: index !== undefined ? index : -1,
+            answerIds: selectedOptions.map((option) => parseInt(option as string, 10)),
+        };
+        dispatch(addAnswer(answer)); // Dispatch the action to add the answer to the store
     };
+
 
     return (
         <Card
