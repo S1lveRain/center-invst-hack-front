@@ -23,6 +23,8 @@ export const Head = () => {
         backgroundColor: "white",
         display: "flex",
         justifyContent: "space-between",
+        zIndex: 1,
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
       }}
     >
       <Link to={"/"} style={{ display: "flex", alignItems: "center" }}>
@@ -50,7 +52,7 @@ export const Head = () => {
                 style={{
                   margin: "-10px 0 0 0",
                   position: "absolute",
-                  right: 105,
+                  right: 95,
                   top: 20,
                 }}
               >
@@ -59,13 +61,7 @@ export const Head = () => {
             )}
           </div>
         )}
-        {currentUser && (
-          <Avatar
-            size="default"
-            icon={<UserOutlined />}
-            style={{ margin: "0 10px 0 0" }}
-          />
-        )}
+        {currentUser && <Avatar size="default" icon={<UserOutlined />} />}
       </div>
     </Header>
   );

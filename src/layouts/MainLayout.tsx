@@ -18,10 +18,10 @@ export const MainLayout: FC<MainLayoutI> = ({
 }) => {
   const { token } = theme.useToken();
   return (
-    <Layout style={{ height: "100%" }}>
+    <Layout style={{ height: "100vh" }}>
       <Head />
-      <Content style={{ padding: "0 50px" }}>
-        <div style={{ margin: "16px 0" }} />
+      <Content style={{ padding: "0 30px 0 30px" }}>
+        <div style={{}} />
         <Layout
           style={{
             padding: "20px 20px",
