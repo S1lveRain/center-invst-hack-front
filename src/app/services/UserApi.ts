@@ -1,7 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/dist/query/react";
 import customFetchBase from "../interceptor";
 import { UserT } from "../Types/UserType";
-import { ResultsT } from "../Types/ResultsType";
+import { ResultByIdT, ResultsT } from "../Types/ResultsType";
 
 export const userAPI = createApi({
   reducerPath: "userAPI",
@@ -20,7 +20,7 @@ export const userAPI = createApi({
       }),
       providesTags: (result) => ["User"],
     }),
-    allTests: build.query<ResultsT[], void>({
+    allTests: build.query<ResultsT[], any>({
       query: () => ({
         url: "users/test/results",
       }),
@@ -33,6 +33,13 @@ export const userAPI = createApi({
         body: content,
       }),
     }),
+    getUserTestResultsById: build.query<ResultByIdT, string>({
+      query:(id: string) => ({
+        url: `users/result/${id}`,
+        method: "GET",
+  
+      })
+    })
   }),
 });
 
@@ -41,4 +48,5 @@ export const {
   useAllTestsQuery,
   useGetUsersQuery,
   useUpdateUserMutation,
+  useGetUserTestResultsByIdQuery,
 } = userAPI;

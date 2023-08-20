@@ -15,7 +15,7 @@ export const HelloMessage: FC<HelloMessageI> = ({
   isPlainUser = false,
   user,
 }) => {
-  const { data: tests, isLoading } = useAllTestsQuery();
+  const { data: tests, isLoading } = useAllTestsQuery('');
 
   return (
     <MainLayout withBacking>
@@ -46,7 +46,7 @@ export const HelloMessage: FC<HelloMessageI> = ({
           icon={<InfoOutlined />}
           title={"Добро пожаловать"}
           subTitle={
-            "Приветствуем вас на портале тестирования Центр-Инвеста. Выберите интересующую вас вакансию в меню слева."
+            "Приветствуем вас на портале тестирования ДГТУ. Выберите интересующий вас тест в меню слева."
           }
         />
       ) : (

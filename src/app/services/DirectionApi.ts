@@ -8,7 +8,7 @@ export const directionApi = createApi({
   baseQuery: customFetchBase,
   endpoints: (builder) => ({
     getDirections: builder.query<DirectionT[], any>({
-      query: (limit: string) => ({
+      query: () => ({
         url: `/directions`,
       }),
     }),

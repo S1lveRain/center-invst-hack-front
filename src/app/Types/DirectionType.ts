@@ -28,9 +28,10 @@ export type InfoT = {
   value: string;
 };
 export type DirectionT = {
-  id: number;
-  title: string;
-  desc: string;
-  infos: InfoT[];
-  ways: WaysT[];
-};
+    id: number,
+    title: string,
+    desc: string,
+    infos: InfoT[],
+    ways: WaysT[],
+}
+

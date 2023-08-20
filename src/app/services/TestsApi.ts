@@ -2,6 +2,7 @@ import { DirectionT, TestT } from "../Types/DirectionType";
 import { BASE_URL } from "../http";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import customFetchBase from "../interceptor";
+import { AddCriteriaBodyT } from "../Types/TestApiReqTypes";
 import { Answer } from "../slices/quizSlice";
 
 const token = localStorage.getItem("token");
@@ -20,7 +21,16 @@ export const testsApi = createApi({
         url: `/tests/${id}`,
       }),
     }),
-    saveAnswers: builder.mutation<
+    addCriteria: builder.mutation<null, AddCriteriaBodyT >({
+      query: ({id, name}) => ({
+        url: `/tests/${id}/add-criteria`,
+        method: "POST",
+        body: {
+          name,
+        },
+      })
+    }),
+     saveAnswers: builder.mutation<
       void,
       { answers: Answer[]; testId: string | undefined }
     >({
@@ -32,8 +42,8 @@ export const testsApi = createApi({
         };
       },
     }),
+   
   }),
 });
 
-export const { useGetTestsQuery, useGetTestByIdQuery, useSaveAnswersMutation } =
-  testsApi;
+export const { useGetTestsQuery, useGetTestByIdQuery, useAddCriteriaMutation, useSaveAnswersMutation} = testsApi;
