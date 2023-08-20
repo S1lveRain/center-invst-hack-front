@@ -6,25 +6,25 @@ import { useSaveAnswersMutation } from "../../app/services/TestsApi";
 import { Answer, addAnswer } from "../../app/slices/quizSlice";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../app/hooks";
 
 const { Title } = Typography;
 const { useToken } = theme;
 export interface Option {
   id: string;
   text: string;
-
 }
 
 interface QuizQuestionProps {
   question: string;
   options: AnswerT[];
-  correctAnswer: string;
+  correctAnswer: string | "";
   onSubmit: (isCorrect: boolean) => void;
   index: number;
   setAnsweredQuestionCount: any;
-  answeredQuestionCount: number,
-  answeredQuestions: any,
-  setAnsweredQuestions: any
+  answeredQuestionCount: number;
+  answeredQuestions: any;
+  setAnsweredQuestions: any;
 }
 
 interface ColoredRadioProps {
@@ -46,6 +46,7 @@ const ColoredRadio: React.FC<ColoredRadioProps> = ({
 
   return (
     <Radio
+      type={"radio"}
       checked={isSelected}
       value={value}
       onClick={() => onChange({ target: { value } } as RadioChangeEvent)}
@@ -68,21 +69,19 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   correctAnswer,
   onSubmit,
   index,
-    setAnsweredQuestionCount,
-    answeredQuestionCount,
-    setAnsweredQuestions,
-    answeredQuestions
+  setAnsweredQuestionCount,
+  answeredQuestionCount,
+  setAnsweredQuestions,
+  answeredQuestions,
 }) => {
-  const [selectedOption, setSelectedOption] = useState<string>("");
-  const [saveAnswers, { isLoading: isSaving }] = useSaveAnswersMutation();
+  const [selectedOption, setSelectedOption] = useState<string>(correctAnswer);
   const [disabledButton, setDisabledButton] = useState(false);
   const [hasAnswered, setHasAnswered] = useState(false);
-  const { testId } = useParams(); // Изменилась часть получения testId
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>(
-      {}
-  );
+  const [selectedAnswers, setSelectedAnswers] = useState<
+    Record<string, string>
+  >({});
   const [answeredLog, setAnsweredLog] = useState<number[]>([]);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleChange = (e: RadioChangeEvent) => {
     const selectedValue = e.target.value;
@@ -102,21 +101,22 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 
     const answer = {
       questionId: index,
-      answerIds: [parseInt(selectedValue, 10)], // Преобразование в число
+      answerIds: [parseInt(selectedValue, 10)],
     };
 
-    dispatch(addAnswer(answer)); // Отправка экшена в Redux
+    dispatch(addAnswer(answer));
+    //  onSubmit(selectedValue === correctAnswer);
 
-    onSubmit(selectedValue === correctAnswer);
     setDisabledButton(true);
   };
 
-
   return (
-    <Card
-      className={styles.card}
-    >
-      <Radio.Group className={styles.radioGroup}>
+    <Card className={styles.card}>
+      <Radio.Group
+        className={styles.radioGroup}
+        name="radiogroup"
+        defaultValue={selectedOption}
+      >
         {options.map((option) => (
           <ColoredRadio
             key={option.id}
@@ -134,6 +134,5 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 
 export default QuizQuestion;
 function dispatch(arg0: any) {
-    throw new Error("Function not implemented.");
+  throw new Error("Function not implemented.");
 }
-
