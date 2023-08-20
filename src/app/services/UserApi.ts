@@ -20,7 +20,7 @@ export const userAPI = createApi({
       }),
       providesTags: (result) => ["User"],
     }),
-    allTests: build.query<ResultsT[], void>({
+    allTests: build.query<ResultsT[], any>({
       query: () => ({
         url: "users/test/results",
       }),

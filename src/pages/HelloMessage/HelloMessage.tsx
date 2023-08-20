@@ -15,7 +15,7 @@ export const HelloMessage: FC<HelloMessageI> = ({
   isPlainUser = false,
   user,
 }) => {
-  const { data: tests, isLoading } = useAllTestsQuery();
+  const { data: tests, isLoading } = useAllTestsQuery('');
 
   return (
     <MainLayout withBacking>

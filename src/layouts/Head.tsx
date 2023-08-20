@@ -31,10 +31,6 @@ export const Head = () => {
         <h1 style={{ color: "#167AFF", margin: 0 }}>ТЕСТ ДГТУ</h1>
       </Link>
 
-      <Link style={{ display: "flex", alignItems: "center" }} to={"/testsResult"}>
-        <h4 style={{ color: "#167AFF", margin: 0 }}>Результаты</h4>
-      </Link>
-
       <div
         style={{
           display: "flex",
