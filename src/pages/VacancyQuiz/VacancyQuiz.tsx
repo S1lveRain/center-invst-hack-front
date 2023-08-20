@@ -1,15 +1,10 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Button,
   Card,
   Col,
   Row,
-  AutoComplete,
-  Input,
-  Space,
   SelectProps,
-  Typography,
-  Dropdown,
   Anchor,
   Layout,
   theme,
@@ -18,30 +13,29 @@ import {
   Statistic,
   Spin,
 } from "antd";
-import { Widget } from "../../components/Widget/Widget";
-import { Simulate } from "react-dom/test-utils";
 import styles from "./VacancyQuiz.module.css";
-import { quizData } from "../../app/dataExample";
 import { Link, useParams } from "react-router-dom";
 import OpenQuizQuestion from "../../components/OpenQuizQuestion/OpenQuizQuestion";
 import { MultipleQuizQuestion } from "../../components/MultipleQuizQuestion/MultipleQuizQuestion";
 import QuizQuestion from "../../components/QuizQuestion/QuizQuestion";
-import { MenuProps } from "rc-menu";
 import {
   ArrowDownOutlined,
   ArrowUpOutlined,
-  DownOutlined,
   MailOutlined,
 } from "@ant-design/icons";
-import { useGetDirectionByIdQuery } from "../../app/services/DirectionApi";
 import { useGetTestByIdQuery } from "../../app/services/TestsApi";
 import { MainLayout } from "../../layouts/MainLayout";
-import { DefaultOptionType } from "rc-cascader";
 import { useGetUsersQuery } from "../../app/services/UserApi";
-const { Title } = Typography;
+import { useSaveAnswersMutation } from "../../app/services/TestsApi";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { getMarkedAnswer } from "../../app/slices/quizSlice";
 
 interface VacancyQuizI {
   /* vacancyList: VacancyT[], */
+}
+
+interface AnswersState {
+  [questionIndex: number]: string | string[] | boolean;
 }
 
 export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
@@ -54,93 +48,35 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
   );
   const [activeTabKey1, setActiveTabKey1] = useState<string>("quizes");
   const [options, setOptions] = useState<SelectProps<object>["options"]>([]);
-  const [items, setItems] = useState(test);
+  const [saveAnswers, { isLoading }] = useSaveAnswersMutation();
+  const [answers, setAnswers] = useState<AnswersState>({});
 
-  const searchResult = (query: string) => {
-    const searchOption: SelectProps<object>["options"] = [];
-    test?.questions.map((question, idx) => {
-      if (question.text.includes(query)) {
-        searchOption.push({
-          value: question.text,
-          label: (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <span>
-                Найдено <a>{query}</a> в {question.text}
-              </span>
-            </div>
-          ),
-        });
-      }
-    });
-    return searchOption;
-  };
+  const dispatch = useAppDispatch();
+  const quizAnswers = useAppSelector((state) => state.quiz.answers);
 
-  const handleSearch = (value: string) => {
-    setOptions(value ? searchResult(value) : []);
-  };
-
-  const onSelect = (value: string) => {
-    let indexOfSelectedItem = test?.questions.findIndex(
-      (question) => question.text === value
-    );
-    const element = document.getElementById(`part-${indexOfSelectedItem}`);
-    element &&
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-        inline: "nearest",
-      });
-  };
-
-  const onTab1Change = (key: string) => {
-    setActiveTabKey1(key);
-  };
-
-  const tabList = [
-    {
-      key: "users",
-      tab: "Пользователи",
-    },
-    {
-      key: "quizes",
-      tab: "Тесты",
-    },
-  ];
-
-  const extra = (
-    <Space wrap>
-      {activeTabKey1 === "users" && (
-        <>
-          <Button type="primary" ghost>
-            По направлению
-          </Button>
-          <Button type="primary" ghost>
-            По баллам
-          </Button>
-        </>
-      )}
-
-      <AutoComplete
-        dropdownMatchSelectWidth={252}
-        style={{ width: 300 }}
-        options={options}
-        onSelect={onSelect}
-        onSearch={handleSearch}
-      >
-        <Input.Search
-          size="middle"
-          placeholder="Поиск"
-          enterButton
-          style={{ width: 200 }}
-        />
-      </AutoComplete>
-    </Space>
+  const answerCount = useMemo(
+    () =>
+      quizAnswers
+        .map((quest) => quest.answerIds.length > 0)
+        .filter((el) => el !== false).length,
+    [quizAnswers]
   );
+
+  const sendAnswers = useCallback(async () => {
+    await saveAnswers({
+      answers: quizAnswers,
+      testId: id,
+    }).unwrap();
+  }, [id, quizAnswers, saveAnswers]);
+
+  useEffect(() => {
+    sendAnswers();
+  }, [quizAnswers, sendAnswers]);
+
+  useEffect(() => {
+    if (test) dispatch(getMarkedAnswer(test?.questions));
+  }, [test]);
+
   const usersList = (
     <Col className={styles.itemList}>
       {users &&
@@ -217,7 +153,13 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
                   quiz.answers[0] ? quiz.answers[0].text : undefined
                 }
                 question={quiz.text}
-                onSubmit={() => {}}
+                onSubmit={(selectedAnswer) => {
+                  const updatedAnswers = {
+                    ...answers,
+                    [index]: selectedAnswer,
+                  };
+                  setAnswers(updatedAnswers);
+                }}
                 setAnsweredQuestionCount={setAnsweredQuestionCount}
                 answeredQuestionCount={answeredQuestionCount}
                 answeredQuestions={answeredQuestions}
@@ -229,11 +171,17 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
               <MultipleQuizQuestion
                 index={index + 1}
                 correctAnswers={quiz.answers
-                  .filter((answer) => answer.isCorrect === true)
+                  .filter((answer) => answer.isAnswer === true)
                   .map((answer) => answer.text)}
                 options={[...quiz.answers]}
                 question={quiz.text}
-                onSubmit={() => {}}
+                onSubmit={(selectedAnswer) => {
+                  const updatedAnswers = {
+                    ...answers,
+                    [index]: selectedAnswer,
+                  };
+                  setAnswers(updatedAnswers);
+                }}
                 setAnsweredQuestionCount={setAnsweredQuestionCount}
                 answeredQuestionCount={answeredQuestionCount}
                 answeredQuestions={answeredQuestions}
@@ -245,10 +193,15 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
               <div id={`part-${index}`}>
                 <QuizQuestion
                   index={index + 1}
-                  correctAnswer={quiz.answers[0].text}
+                  correctAnswer={
+                    quiz.answers.find((answer) => answer.isAnswer)?.id + "" ||
+                    ""
+                  }
                   options={[...quiz.answers]}
                   question={quiz.text}
-                  onSubmit={() => {}}
+                  onSubmit={() => {
+                    sendAnswers();
+                  }}
                   setAnsweredQuestionCount={setAnsweredQuestionCount}
                   answeredQuestionCount={answeredQuestionCount}
                   answeredQuestions={answeredQuestions}
@@ -292,7 +245,7 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
               <h3 style={{ margin: "auto" }}>
                 {`Вопросы - `}
                 {test
-                  ? `${answeredQuestionCount}/${
+                  ? `${answerCount}/${
                       test?.questions.length === undefined
                         ? "0"
                         : test?.questions.length
@@ -303,17 +256,21 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
             {test ? (
               <Sider style={{ background: token.colorBgContainer }} width={250}>
                 <Anchor>
-                  {test?.questions.map((quiz, index) => {
-                    const textColor = answeredQuestions[index]
-                      ? "#bfbfbf"
-                      : "black";
+                  {test?.questions.map((ques, index) => {
+                    const curQuest = quizAnswers.find(
+                      (el) => el.questionId === ques?.id
+                    );
+                    const textColor =
+                      curQuest && curQuest.answerIds.length > 0
+                        ? "#bfbfbf"
+                        : "black";
                     return (
                       <Anchor.Link
                         key={`part-${index}`}
                         href={`#part-${index}`}
                         title={
                           <span style={{ color: textColor }}>
-                            {`${index + 1}. ${quiz.text}`}
+                            {`${index + 1}. ${ques.text}`}
                           </span>
                         }
                       />
@@ -327,6 +284,26 @@ export const VacancyQuiz: React.FC<VacancyQuizI> = () => {
           </Card>
         </div>
         {contentList[activeTabKey1]}
+      </div>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "end",
+          marginTop: 10,
+        }}
+      >
+        {test && (
+          <Button
+            size="large"
+            type="primary"
+            onClick={sendAnswers}
+            disabled={isLoading || answerCount < test.questions.length}
+            style={{}}
+          >
+            Отправить ответы
+          </Button>
+        )}
       </div>
     </MainLayout>
   );
