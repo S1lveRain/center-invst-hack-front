@@ -21,12 +21,13 @@ const App: React.FC = () => {
   const userId = useSelector(getUser());
    
   const [isUser, setIsUser] = useState(true)
+  const [skip, setSkip] = useState(true)
   const { data: currentUser } = useGetUserQuery(userId as string);
   const { data: direction, isLoading, isError } = useGetDirectionsQuery('', {
     skip: isUser
   });
   const { data: userTests, isLoading: userTestsLoading, isError: userTestsError } = useAllTestsQuery('',{
-    skip: !isUser
+    skip
   });
 
  
@@ -34,6 +35,9 @@ const App: React.FC = () => {
     if (currentUser && currentUser.role === 'admin') {
       setIsUser(false)
     } 
+    if (currentUser && currentUser.role === 'user') {
+      setSkip(false)
+    }
   }, [currentUser])
 
 
