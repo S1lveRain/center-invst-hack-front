@@ -6,7 +6,7 @@ import { DirectionT } from "../../app/Types/DirectionType";
 import { MenuProps } from "rc-menu";
 import { InfoOutlined, PlusOutlined, } from "@ant-design/icons";
 import { useGetUserTestResultsByIdQuery } from "../../app/services/UserApi";
-import { useAddCriteriaMutation, useGetTestByIdQuery } from "../../app/services/TestsApi";
+import { useAddCriteriaMutation, useGetTestByIdQuery, useGetTestCriteriasQuery } from "../../app/services/TestsApi";
 import { ResultsT } from "../../app/Types/ResultsType";
 const { Text, Title } = Typography;
 
@@ -23,12 +23,17 @@ type MenuItem = Required<MenuProps>['items'][number];
 export const TestsResult: FC<VacancyWindowI> = ({ data, isLoading, isError, isPlainUser = false }) => {
     const [activeElement, setActiveElement] = useState('');
     const [skip, setSkip] = useState(true)
+    const [skipCriteriaReq, setSkipCriteriaReq] = useState(true)
     const { data: testData, isLoading: isTestsLoading } = useGetUserTestResultsByIdQuery(activeElement, {
         skip
     })
     const { data: test } = useGetTestByIdQuery(activeElement, {
         skip
     })
+    const {data: testCriterias } = useGetTestCriteriasQuery(activeElement, {
+        skip: skipCriteriaReq,
+    })
+
     const resultChartData = testData?.criterias.map((item) => {
         return {
             result: item.result * 10,
@@ -41,9 +46,7 @@ export const TestsResult: FC<VacancyWindowI> = ({ data, isLoading, isError, isPl
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [criteriaName, setCriteriaName] = useState('')
 
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
+
     function getItem(
         label: React.ReactNode,
         key: React.Key,
@@ -63,6 +66,7 @@ export const TestsResult: FC<VacancyWindowI> = ({ data, isLoading, isError, isPl
     const onClick: MenuProps['onClick'] = (e) => {
         setSkip(false)
         setActiveElement(e.key)
+        !isPlainUser && setSkipCriteriaReq(false)
     };
     function getMenuItmes() {
 
@@ -162,9 +166,9 @@ export const TestsResult: FC<VacancyWindowI> = ({ data, isLoading, isError, isPl
                                     <Text strong >Критерии теста:</Text>
                                     <Space style={{ display: 'flex', marginTop: '20px' }}>
                                         {
-                                            testData?.criterias.map((item) => {
+                                         testCriterias?.length && testCriterias.map((item) => {
                                                 return (
-                                                    <Card style={{ width: 'fit-content', boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)" }}>{item.criteria.name}</Card>
+                                                    <Card style={{ width: 'fit-content', boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)" }}>{item.name}</Card>
                                                 )
                                             })
                                         }
