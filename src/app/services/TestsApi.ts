@@ -3,6 +3,9 @@ import { BASE_URL } from "../http";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import customFetchBase from "../interceptor";
 import { AddCriteriaBodyT } from "../Types/TestApiReqTypes";
+import { Answer } from "../slices/quizSlice";
+
+const token = localStorage.getItem("token");
 import { CriteriaT } from "../Types/ResultsType";
 
 export const testsApi = createApi({
@@ -32,7 +35,19 @@ export const testsApi = createApi({
           name,
         },
       })
-    })
+    }),
+     saveAnswers: builder.mutation<
+      void,
+      { answers: Answer[]; testId: string | undefined }
+    >({
+      query: ({ answers, testId }) => {
+        return {
+          url: `/users/test/save/${testId}`,
+          method: "POST",
+          body: answers,
+        };
+      },
+    }),
    
   }),
 });
