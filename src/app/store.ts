@@ -1,26 +1,28 @@
-import { authAPI } from "./services/AuthApi";
+import {authAPI} from "./services/AuthApi";
 import tokenReducer from "./slices/authSlice";
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { directionApi } from "./services/DirectionApi";
-import { testsApi } from "./services/TestsApi";
-import { userAPI } from "./services/UserApi";
+import {combineReducers, configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
+import {directionApi} from "./services/DirectionApi";
+import {testsApi} from "./services/TestsApi";
+import {userAPI} from "./services/UserApi";
+import quizReducer from './slices/quizSlice'
 
 const rootReducer = combineReducers({
-  [directionApi.reducerPath]: directionApi.reducer,
-  [testsApi.reducerPath]: testsApi.reducer,
-  [authAPI.reducerPath]: authAPI.reducer,
-  [userAPI.reducerPath]: userAPI.reducer,
-  token: tokenReducer,
+    [directionApi.reducerPath]: directionApi.reducer,
+    [testsApi.reducerPath]: testsApi.reducer,
+    [authAPI.reducerPath]: authAPI.reducer,
+    [userAPI.reducerPath]: userAPI.reducer,
+    token: tokenReducer,
+    quiz: quizReducer,
 });
 export const store = configureStore({
-  reducer: rootReducer,
-  middleware: (getDefaultMiddware) =>
-    getDefaultMiddware({}).concat([
-      directionApi.middleware,
-      testsApi.middleware,
-      authAPI.middleware,
-      userAPI.middleware,
-    ]),
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({}).concat([
+            directionApi.middleware,
+            testsApi.middleware,
+            authAPI.middleware,
+            userAPI.middleware,
+        ]),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

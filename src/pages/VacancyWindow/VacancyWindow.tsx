@@ -9,9 +9,10 @@ import { MainLayout } from "../../layouts/MainLayout";
 
 interface VacancyWindowI {
   data: DirectionT[] | undefined;
+  withNav?:  boolean;
 }
 
-export const VacancyWindow: FC<VacancyWindowI> = ({ data }) => {
+export const VacancyWindow: FC<VacancyWindowI> = ({ data, withNav = false}) => {
   const { token } = theme.useToken();
   const { id } = useParams<{ id: string }>();
   const [activeElement, setActiveElement] = useState(data?.length && data[0]);
@@ -28,7 +29,6 @@ export const VacancyWindow: FC<VacancyWindowI> = ({ data }) => {
     <MainLayout withNav withBacking>
       {activeElement && (
         <Result
-          status="success"
           /* icon={<activeElement.icon />} */
           title={activeElement.title}
           subTitle={activeElement.desc}

@@ -1,15 +1,14 @@
 import { DirectionT } from "../Types/DirectionType";
 import { BASE_URL } from "../http";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import customFetchBase from "../interceptor";
 
 export const directionApi = createApi({
   reducerPath: "direction",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${BASE_URL}`,
-  }),
+  baseQuery: customFetchBase,
   endpoints: (builder) => ({
     getDirections: builder.query<DirectionT[], any>({
-      query: (limit: string) => ({
+      query: () => ({
         url: `/directions`,
       }),
     }),

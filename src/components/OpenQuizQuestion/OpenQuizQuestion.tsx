@@ -9,26 +9,42 @@ interface OpenQuizQuestionProps {
   question: string;
   correctAnswer: string | undefined;
   onSubmit: (isCorrect: boolean) => void;
-  index?: number,
+  index?: number;
+  setAnsweredQuestionCount: any;
+  answeredQuestionCount: number;
+  answeredQuestions: any;
+  setAnsweredQuestions: any;
 }
 
 const OpenQuizQuestion: React.FC<OpenQuizQuestionProps> = ({
   question,
   correctAnswer,
   onSubmit,
-  index
+  index,
+  setAnsweredQuestionCount,
+  answeredQuestionCount,
+  answeredQuestions,
+  setAnsweredQuestions,
 }) => {
   const [answer, setAnswer] = useState<string>("");
+  const [disabledButton, setDisabledButton] = useState(false);
+  const [hasAnswered, setHasAnswered] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setAnswer(e.target.value);
-  };
-
-  const handleSubmit = () => {
     if (correctAnswer)
       onSubmit(
         answer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()
       );
+    setDisabledButton(true);
+    setAnsweredQuestionCount(
+      hasAnswered ? answeredQuestionCount : answeredQuestionCount + 1
+    );
+    if (typeof index !== "undefined") {
+      const updatedAnsweredQuestions = [...answeredQuestions];
+      updatedAnsweredQuestions[index] = true;
+      setAnsweredQuestions(updatedAnsweredQuestions);
+    }
   };
 
   return (
@@ -48,14 +64,6 @@ const OpenQuizQuestion: React.FC<OpenQuizQuestionProps> = ({
           autoSize={{ minRows: 1, maxRows: 6 }}
         />
       </div>
-      <Button
-        type="primary"
-        onClick={handleSubmit}
-        disabled={!answer}
-        className={styles.submitButton}
-      >
-        Ответить
-      </Button>
     </Card>
   );
 };
